@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.GisQuickViewMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.GisQuickView" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="label" property="label" jdbcType="VARCHAR" />
+    <result column="zoom_level" property="zoomLevel" jdbcType="INTEGER" />
+    <result column="center_lon" property="centerLon" jdbcType="DOUBLE" />
+    <result column="center_lat" property="centerLat" jdbcType="DOUBLE" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="p_id" property="pId" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="angle" property="angle" jdbcType="INTEGER" />
+    <result column="whether_open" property="whetherOpen" jdbcType="CHAR" />
+    <result column="init" property="init" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, label, zoom_level, center_lon, center_lat, user_id, create_time, p_id,del_flag,angle,whether_open,init
+  </sql>
+  
+  <!-- 新建快视图 -->
+   <insert id="insertQuickView" useGeneratedKeys="true" keyProperty="id" parameterType="com.bdfint.backend.modules.gis.bean.GisQuickView">
+    insert into gis_quick_view(label,zoom_level,center_lon,center_lat,user_id,create_time,p_id,angle,whether_open,init)
+	    values
+	    ( #{label}, #{zoomLevel}, #{centerLon}, #{centerLat},#{userId},#{createTime},#{pId},#{angle},#{whetherOpen},#{init})
+	</insert>
+  
+  
+  
+   <!--根据ID查询 -->
+  <select id="queryById" resultType="com.bdfint.backend.modules.gis.bean.GisQuickView" parameterType="com.bdfint.backend.modules.gis.bean.GisQuickView" >
+  	SELECT id,label,zoom_level as zoomLevel,center_lon as centerLon,center_lat as centerLat,user_id as userId,create_time as createTime,p_id as pId,angle,whether_open as whetherOpen,init FROM gis_quick_view  WHERE  id = #{id}
+  </select>
+  
+  <!--根据用户ID、是否公开查询快视图 -->
+  <select id="queryByUserIdAndWhetherOpen" resultType="com.bdfint.backend.modules.gis.bean.GisQuickView" parameterType="com.bdfint.backend.modules.gis.bean.GisQuickView" >
+  	SELECT id,label,zoom_level as zoomLevel,center_lon as centerLon,center_lat as centerLat,user_id as userId,create_time as createTime,p_id as pId,angle,whether_open as whetherOpen,init FROM gis_quick_view t  WHERE
+  	(t.user_id=#{userId} or t.whether_open=#{whetherOpen}) and t.init=#{init} and t.del_flag=#{delFlag}
+  </select>
+  
+  <!--根据用户ID、初始化状态查询快初始化快视图 -->
+  <select id="queryByUserIdAndInit" resultType="com.bdfint.backend.modules.gis.bean.GisQuickView" parameterType="com.bdfint.backend.modules.gis.bean.GisQuickView" >
+  	SELECT id,label,zoom_level as zoomLevel,center_lon as centerLon,center_lat as centerLat,user_id as userId,create_time as createTime,p_id as pId,angle,whether_open as whetherOpen,init FROM gis_quick_view t  WHERE 1=1 
+  	<if test="userId!=null and userId != ''">
+  		and t.user_id=#{userId}
+  	</if>
+  	<if test="init!=null and init != ''">
+  		and t.init=#{init}
+  	</if>
+  		and t.del_flag=#{delFlag}
+  </select>
+  
+  <!-- 伪删除  -->
+  <update id="delBatch">
+    update gis_quick_view
+    set del_flag=1
+    WHERE id IN
+    <foreach collection="array" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+</mapper>

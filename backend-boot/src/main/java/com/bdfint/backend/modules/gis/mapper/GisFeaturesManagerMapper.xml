@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.GisFeaturesManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.GisFeaturesManager" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="layer_id" property="layerId" jdbcType="VARCHAR" />
+    <result column="style_id" property="styleId" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="label" property="label" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="projection" property="projection" jdbcType="VARCHAR" />
+    <result column="allow_week" property="allowWeek" jdbcType="VARCHAR" />
+    <result column="allow_hours" property="allowHours" jdbcType="VARCHAR" />
+    <result column="allow_days" property="allowDays" jdbcType="VARCHAR" />
+    <result column="disable" property="disable" jdbcType="CHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.bdfint.backend.modules.gis.bean.GisFeaturesManager" extends="BaseResultMap" >
+    <result column="features" property="features" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, layer_id, style_id, del_flag, user_id, label, remark,type,projection,allow_week,allow_hours,allow_days,disable
+  </sql>
+  <sql id="Blob_Column_List" >
+    features
+  </sql>
+  
+  <!-- 新增标注特征 -->
+  <insert id="insertGisFeaturesManager" useGeneratedKeys="true" keyProperty="id" parameterType="com.bdfint.backend.modules.gis.bean.GisFeaturesManager">
+ 	insert into gis_features_manager(layer_id, style_id, del_flag, user_id, label, remark,type,features,projection,allow_week,allow_hours,allow_days,disable)
+    values(#{layerId},#{styleId},#{delFlag},#{userId},#{label},#{remark},#{type},#{features},#{projection},#{allowWeek},#{allowHours},#{allowDays},#{disable})
+  </insert>
+  
+  <!-- 根据图层ID查询标注特征 -->
+  <select id="queryBylayerIdFeaturesManager" resultType="com.bdfint.backend.modules.gis.bean.GisFeaturesManager" parameterType="com.bdfint.backend.modules.gis.bean.GisFeaturesManager" >
+  	select t.id, t.layer_id as layerId, t.style_id as styleId, t.user_id as userId, t.label, t.remark,t.type,t.projection,t.features,t.allow_week as allowWeek,t.allow_hours as allowHours,t.allow_days as allowDays,t.disable from gis_features_manager t where t.layer_id=#{layerId} and t.del_flag=#{delFlag}
+  </select>
+  
+   <!-- 伪删除  -->
+  <update id="delBatch">
+    update gis_features_manager
+    set del_flag=1
+    WHERE id IN
+    <foreach collection="array" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+</mapper>

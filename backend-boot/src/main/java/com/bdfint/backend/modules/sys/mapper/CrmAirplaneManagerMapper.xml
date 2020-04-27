@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.sys.mapper.CrmAirplaneManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.sys.bean.CrmAirplaneManager" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tail_code" property="tailCode" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="made_by" property="madeBy" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="factory_time" property="factoryTime" jdbcType="TIMESTAMP" />
+    <result column="purpose" property="purpose" jdbcType="VARCHAR" />
+    <result column="bound" property="bound" jdbcType="CHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="app_unit" property="appUnit" jdbcType="VARCHAR" />
+    <result column="reg_time" property="regTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, tail_code, type, made_by, age, user_id, status, factory_time, purpose, bound, 
+    del_flag, app_unit, reg_time
+  </sql>
+
+</mapper>

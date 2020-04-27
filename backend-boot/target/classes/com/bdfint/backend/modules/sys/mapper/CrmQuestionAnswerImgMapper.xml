@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.sys.mapper.CrmQuestionAnswerImgMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.sys.bean.CrmQuestionAnswerImg" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="zip_img" property="zipImg" jdbcType="VARCHAR" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, zip_img, img, parent_id
+  </sql>
+
+  <insert id="insertBatch">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    INSERT INTO crm_question_answer_img
+    (zip_img, img, parent_id)
+    VALUES
+    <foreach collection="list" item="item" separator=",">
+      (#{item.zipImg},#{item.img},#{item.parentId})
+    </foreach>
+  </insert>
+
+  <!--真删除-->
+  <delete id="delbatch1">
+    DELETE FROM crm_question_answer_img
+    WHERE id IN
+    <foreach collection="array" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </delete>
+
+
+
+</mapper>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dbs.mapper.TbMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.dbs.model.TbMessage" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="message_name" property="messageName" jdbcType="VARCHAR" />
+    <result column="message_content" property="messageContent" jdbcType="VARCHAR" />
+    <result column="menu_id" property="menuId" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, message_name, message_content, menu_id, parent_id, user_id, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_message
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByVo" resultMap="BaseResultMap" parameterType="com.dbs.model.TbMessage">
+      SELECT
+      <include refid="Base_Column_List"/>
+      FROM tb_message
+      <where>
+          <if test="userId">
+            AND user_id = #{userId}
+          </if>
+          <if test="status">
+            AND status = #{status}
+          </if>
+      </where>
+  </select>
+    <select id="selectCount" resultType="integer">
+        SELECT COUNT(id)
+        FROM tb_message
+        <where>
+            <if test="userId">
+                AND user_id = #{userId}
+            </if>
+            <if test="status">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_message
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatch">
+        DELETE FROM tb_message
+        WHERE id IN
+        <foreach collection="array" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+  <insert id="insert" parameterType="com.dbs.model.TbMessage" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_message (message_name, message_content, menu_id, 
+      parent_id, user_id, status
+      )
+    values (#{messageName,jdbcType=VARCHAR}, #{messageContent,jdbcType=VARCHAR}, #{menuId,jdbcType=INTEGER}, 
+      #{parentId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.dbs.model.TbMessage" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="messageName != null" >
+        message_name,
+      </if>
+      <if test="messageContent != null" >
+        message_content,
+      </if>
+      <if test="menuId != null" >
+        menu_id,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="messageName != null" >
+        #{messageName,jdbcType=VARCHAR},
+      </if>
+      <if test="messageContent != null" >
+        #{messageContent,jdbcType=VARCHAR},
+      </if>
+      <if test="menuId != null" >
+        #{menuId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dbs.model.TbMessage" >
+    update tb_message
+    <set >
+      <if test="messageName != null" >
+        message_name = #{messageName,jdbcType=VARCHAR},
+      </if>
+      <if test="messageContent != null" >
+        message_content = #{messageContent,jdbcType=VARCHAR},
+      </if>
+      <if test="menuId != null" >
+        menu_id = #{menuId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dbs.model.TbMessage" >
+    update tb_message
+    set message_name = #{messageName,jdbcType=VARCHAR},
+      message_content = #{messageContent,jdbcType=VARCHAR},
+      menu_id = #{menuId,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="readedBatch">
+        UPDATE tb_message
+        SET status = 1
+        WHERE id IN
+        <foreach collection="array" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

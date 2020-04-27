@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.GisAirlineManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.GisAirlineManager" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="airline_style" property="airlineStyle" jdbcType="CHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.bdfint.backend.modules.gis.bean.GisAirlineManager" extends="BaseResultMap" >
+    <result column="geo_josn" property="geoJosn" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, user_id, airline_style,del_flag
+  </sql>
+  <sql id="Blob_Column_List" >
+    geo_josn
+  </sql>
+  
+  <!-- 新增航线 -->
+  <insert id="insertAirline" useGeneratedKeys="true" keyProperty="id" parameterType="com.bdfint.backend.modules.gis.bean.GisAirlineManager">
+ 	insert into gis_airline_manager(name, user_id, airline_style, del_flag, geo_josn)
+    values(#{name},#{userId},#{airlineStyle},#{delFlag},#{geoJosn})
+  </insert>
+  
+  <!-- 伪删除  -->
+  <update id="delBatch">
+    update gis_airline_manager
+    set del_flag=1
+    WHERE id IN
+    <foreach collection="array" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+</mapper>

@@ -1,0 +1,112 @@
+# Tomcat
+server:
+  port: 8899
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  connection-timeout: 30000
+
+spring:
+  application:
+    name: manage
+
+  profiles:
+    active: ${config.profile:dev}
+
+
+  jackson:
+    #时区：东8区
+    time-zone: GMT+8
+    #日期格式化
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      #格式化输出
+      indent_output: true
+      #忽略无法转换的对象
+      fail_on_empty_beans: false
+    #设置空如何序列化  如果想要返回没值 或者为 null 的参数，请在这里配置
+#    defaultPropertyInclusion: NON_EMPTY
+    deserialization:
+      #允许对象忽略json中不存在的属性
+      fail_on_unknown_properties: false
+    parser:
+      #允许出现特殊字符和转义符
+      allow_unquoted_control_chars: true
+      #允许出现单引号
+      allow_single_quotes: true
+
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+      enabled: true
+
+  mvc:
+    throw-exception-if-no-handler-found: true
+    locale: zh
+
+  ## Freemarker 配置
+  freemarker:
+    templateLoaderPath: classpath:/templates/
+    suffix: .html
+    cache: false
+    charset: UTF-8
+    checkTemplateLocation: true
+    contentType: text/html
+    exposeRequestAttributes: false
+    exposeSessionAttributes: false
+    requestContextAttribute: request
+
+  http:
+    encoding:
+      force: true
+  aop:
+    proxy-target-class: true
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath:com/doubleskyline/manage/modules/*/mapper/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.doubleskyline.manage.modules.*.entity
+  global-config:
+    #数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID", ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: AUTO
+      #字段策略 IGNORED:"忽略判断",NOT_NULL:"非 NULL 判断"),NOT_EMPTY:"非空判断"
+      field-strategy: NOT_EMPTY
+      #驼峰下划线转换
+      column-underline: true
+      logic-delete-value: -1
+      logic-not-delete-value: 0
+    banner: false
+  #原生配置
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+  mybatis-refresh:
+    #是否开启刷新线程
+    enabled: true
+    #延迟启动刷新程序的秒数
+    delaySeconds: 60
+    #刷新扫描间隔的时长秒数
+    sleepSeconds: 3
+  sql-analyse: # SQL执行效率分析
+    show: false
+    format: false
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+info:
+  version: "1.0"

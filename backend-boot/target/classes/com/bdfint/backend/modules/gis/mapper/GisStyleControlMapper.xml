@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.GisStyleControlMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.GisStyleControl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="layer_id" property="layerId" jdbcType="INTEGER" />
+    <result column="point_size" property="pointSize" jdbcType="INTEGER" />
+    <result column="point_color16" property="pointColor16" jdbcType="VARCHAR" />
+    <result column="point_opacity" property="pointOpacity" jdbcType="INTEGER" />
+    <result column="pline_width" property="plineWidth" jdbcType="INTEGER" />
+    <result column="pline_type" property="plineType" jdbcType="CHAR" />
+    <result column="pline_color16" property="plineColor16" jdbcType="VARCHAR" />
+    <result column="pline_opacity" property="plineOpacity" jdbcType="INTEGER" />
+    <result column="pgon_color" property="pgonColor" jdbcType="VARCHAR" />
+    <result column="pgon_opacity" property="pgonOpacity" jdbcType="INTEGER" />
+    <result column="pgon_edge_width" property="pgonEdgeWidth" jdbcType="INTEGER" />
+    <result column="pgon_edge_color" property="pgonEdgeColor" jdbcType="VARCHAR" />
+    <result column="pgon_edge_opacity" property="pgonEdgeOpacity" jdbcType="INTEGER" />
+    <result column="label_size" property="labelSize" jdbcType="INTEGER" />
+    <result column="label_bgk" property="labelBgk" jdbcType="VARCHAR" />
+    <result column="label_word_color" property="labelWordColor" jdbcType="VARCHAR" />
+    <result column="label_word_o_color" property="labelWordOColor" jdbcType="VARCHAR" />
+    <result column="label_offset_x" property="labelOffsetX" jdbcType="INTEGER" />
+    <result column="label_offset_y" property="labelOffsetY" jdbcType="INTEGER" />
+    <result column="label_text_style" property="labelTextStyle" jdbcType="VARCHAR" />
+    <result column="label_display" property="labelDisplay" jdbcType="CHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, layer_id, point_size, point_color16, point_opacity, pline_width, pline_type, 
+    pline_color16, pline_opacity, pgon_color, pgon_opacity, pgon_edge_width, pgon_edge_color, 
+    pgon_edge_opacity, label_size, label_bgk, label_word_color, label_word_o_color, label_offset_x, 
+    label_offset_y, label_text_style, del_flag,label_display
+  </sql>
+  
+   <!-- 新增样式 -->
+  <insert id="insertStyleControl" useGeneratedKeys="true" keyProperty="id" parameterType="com.bdfint.backend.modules.gis.bean.GisStyleControl">
+ 	insert into gis_style_control(user_id, layer_id, point_size, point_color16, point_opacity, pline_width, pline_type, 
+     	pline_color16, pline_opacity, pgon_color, pgon_opacity, pgon_edge_width, pgon_edge_color,pgon_edge_opacity, label_size, label_bgk, label_word_color, label_word_o_color, label_offset_x,label_offset_y, label_text_style, del_flag)
+    values(#{userId},#{layerId},#{pointSize},#{pointColor16},#{plineOpacity},#{plineWidth},#{plineType},#{plineColor16},#{plineOpacity},#{pgonColor}
+     	,#{pgonOpacity},#{pgonEdgeWidth},#{pgonEdgeColor},#{pgonEdgeOpacity},#{labelSize},#{labelBgk},#{labelWordColor},#{labelWordOColor},#{labelOffsetX},#{labelOffsetY},#{labelTextStyle},#{delFlag}
+    )
+  </insert>
+  
+  <!--根据ID查询 -->
+  <select id="queryById" resultType="com.bdfint.backend.modules.gis.bean.GisStyleControl" parameterType="com.bdfint.backend.modules.gis.bean.GisStyleControl" >
+  	SELECT t.* FROM gis_style_control t  WHERE  t.id = #{id}
+  </select>
+  
+  
+  <!-- 伪删除  -->
+  <update id="delBatch">
+    update gis_style_control
+    set del_flag=1
+    WHERE id IN
+    <foreach collection="array" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+</mapper>

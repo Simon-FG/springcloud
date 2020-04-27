@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dbs.mapper.SysCpMapper" >
+  <resultMap id="BaseResultMap" type="com.dbs.model.SysCp" >
+    <id column="item_id" property="cpId" jdbcType="INTEGER" />
+    <result column="name" property="cpName" jdbcType="VARCHAR" />
+    <result column="introduce" property="cpJs" jdbcType="VARCHAR" />
+    <result column="price" property="cpPrice" jdbcType="DECIMAL" />
+    <result column="describe" property="cpMs" jdbcType="VARCHAR" />
+    <result column="banner" property="cpBanner" jdbcType="VARCHAR" />
+    <result column="ico" property="cpIco" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="item_type" property="itemType" jdbcType="CHAR"/>
+    <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+    <result column="show_home" property="showHome" jdbcType="VARCHAR"/>
+  </resultMap>
+   
+  <resultMap id="BaseResultMapfz" type="com.dbs.model.SysCp" >
+    <id column="item_id" property="cpId" jdbcType="INTEGER" />
+    <result column="name" property="cpName" jdbcType="VARCHAR" />
+    <result column="introduce" property="cpJs" jdbcType="VARCHAR" />
+    <result column="price" property="cpPrice" jdbcType="DECIMAL" />
+    <result column="describe" property="cpMs" jdbcType="VARCHAR" />
+    <result column="banner" property="cpBanner" jdbcType="VARCHAR" />
+    <result column="ico" property="cpIco" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="item_type" property="itemType" jdbcType="CHAR"/>
+    <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+    <result column="cpgnId" property="cpgnId" jdbcType="INTEGER" />
+    <result column="cpgnName" property="cpgnName" jdbcType="VARCHAR" />
+    <result column="cpgnContent" property="cpgnContent" jdbcType="VARCHAR" />
+    <result column="cpgnIco" property="cpgnIco" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    item_id, name, introduce, price, describe, banner, ico, update_time, item_type, user_id,
+    menu_id
+  </sql>
+  <select id="queryCpByPage"  resultType="java.util.HashMap" parameterType="java.util.HashMap" >
+	select item_id as cpId, name as cpName, price as cpPrice, `describe` as cpMs, ico as cpIco, menu_id as menuId from sys_product_item
+	<where>
+		<if test="cpId">
+			and item_id = #{cpId,jdbcType=INTEGER}
+		</if>
+		<if test="cpName">
+			and name = #{cpName,jdbcType=VARCHAR}
+		</if>
+	</where>
+	order by item_id asc;
+  </select>	
+  
+  <select id="queryList"  resultType="java.util.HashMap" parameterType="java.util.HashMap" >
+	select item_id as cpId, name as cpName, price as cpPrice, `describe` as cpMs, ico as cpIco, menu_id as menuId from sys_product_item
+	where show_home = '1'
+	order by item_id asc;
+  </select>	
+  
+ <select id="queryCpdetailByPage" resultType="java.util.HashMap"  resultMap="BaseResultMapfz" parameterType="java.lang.String">
+    select a.item_id,a.name,a.introduce,a.price,a.describe,a.banner,a.ico,a.menu_id,a.item_type,b.name as cpgnName,b.content as cpgnContent,b.ico as cpgnIco from sys_product_item a INNER JOIN sys_product_item_expand b ON a.item_id = b.parent_id where a.menu_id = #{menuId,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.GisNoflyZoneManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.GisNoflyZoneManager" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="label_text" property="labelText" jdbcType="VARCHAR" />
+    <result column="label_type_id" property="labelTypeId" jdbcType="CHAR" />
+    <result column="geo_range" property="geoRange" jdbcType="OTHER" />
+    <result column="area" property="area" jdbcType="DOUBLE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="allow_week" property="allowWeek" jdbcType="VARCHAR" />
+    <result column="allow_hours" property="allowHours" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, label_text, label_type_id, geo_range, area, create_time, allow_week, allow_hours, 
+    del_flag, user_id
+  </sql>
+ 
+     <!-- 新增禁区 -->
+  <insert id="insertNoflyZone" useGeneratedKeys="true" keyProperty="id" parameterType="com.bdfint.backend.modules.gis.bean.GisNoflyZoneManager">
+ 	insert into gis_nofly_zone_manager(label_text, label_type_id, geo_range,area,create_time,allow_week,allow_hours,del_flag,user_id)
+    values(#{labelText},#{labelTypeId},#{geoRange},#{area},#{createTime},#{allowWeek},#{allowHours},#{delFlag},#{userId})
+  </insert>
+ 
+ 
+    <!-- 伪删除  -->
+  <update id="delBatch">
+    update gis_nofly_zone_manager
+    set del_flag=1
+    WHERE id IN
+    <foreach collection="array" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+</mapper>

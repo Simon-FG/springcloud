@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dbs.mapper.SysNewsMapper" >
+  <resultMap id="BaseResultMap" type="com.dbs.model.SysNews" >
+    <id column="id" property="newsId" jdbcType="INTEGER" />
+    <result column="title" property="newsTitle" jdbcType="VARCHAR" />
+    <result column="path" property="newsPath" jdbcType="VARCHAR" />
+    <result column="create_time" property="fbTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="fbStatus" jdbcType="CHAR" />
+    <result column="news_type" property="newsType" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+    <result column="group_id" property="groupId" jdbcType="VARCHAR"/>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.dbs.model.SysNews" extends="BaseResultMap" >
+    <result column="content" property="newsContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, path, create_time, status, news_type, create_by, group_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_public_message
+    where id = #{newsId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByStatus" resultMap="ResultMapWithBLOBs">
+    SELECT
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    FROM sys_public_message
+    WHERE status = #{fbStatus}
+  </select>
+  <select id="selectAll" resultMap="ResultMapWithBLOBs">
+    SELECT
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    FROM sys_public_message
+  </select>
+</mapper>

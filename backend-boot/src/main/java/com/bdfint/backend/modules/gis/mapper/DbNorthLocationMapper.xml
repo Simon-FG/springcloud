@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.DbNorthLocationMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.DbNorthLocation" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="f_flighttype" property="fFlighttype" jdbcType="SMALLINT" />
+    <result column="f_fifo" property="fFifo" jdbcType="OTHER" javaType="Object" typeHandler="com.bdfint.backend.framework.common.JSONTypeHandler"/>
+    <result column="f_time" property="fTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, f_flighttype, f_fifo, f_time
+  </sql>
+  
+  <!-- 根据条件查询飞行器历史航迹-->
+  <select id="queryByParamNorthLocation" resultType="com.bdfint.backend.modules.gis.bean.DbNorthLocation" parameterType="com.bdfint.backend.modules.gis.bean.DbNorthLocation" >
+  	select data from (
+    	select  jsonb_array_elements (f_fifo) as data from db_north_location where 1=1
+<!-- 	    	<if test="startTime!=null"> -->
+<!-- 	  		<![CDATA[ and to_char(f_time, 'yyyy-MM-dd HH:mm:ss')  >=  #{startTime}  ]]> -->
+<!-- 	  		</if> -->
+<!-- 	  		<if test="endTime!=null"> -->
+<!-- 	  		<![CDATA[ and to_char(f_time, 'yyyy-MM-dd HH:mm:ss')  <=  #{endTime}  ]]> -->
+<!-- 	  		</if> -->
+	) t
+	where 1=1
+  	<if test="RE!=null and RE != ''">
+  		and data->>'RE' like  #{RE} ||'%'
+  	</if>
+  	<if test="FN!=null and FN != ''">
+  		and data->>'FN' like  #{FN} ||'%'
+  	</if>
+  	<if test="HX!=null and HX != ''">
+  		and data->>'HX'=#{HX}
+  	</if>
+  	<if test="FT!=null and FT != ''">
+  		and data->>'FT'=#{FT}
+  	</if>
+  	<if test="startTime!=null">
+  		<![CDATA[ and data->>'RT'  >=  #{startTime}  ]]>
+  	</if>
+  	<if test="endTime!=null">
+  		<![CDATA[ and data->>'RT'  <=  #{endTime}  ]]>
+  	</if>
+  	order by data->>'TE' desc
+  </select>
+
+  <!-- 根据北斗卡号统计当日上报数量-->
+  <select id="getDaySum" resultType="java.lang.Integer" >
+  	select count(0) from (
+    	select  jsonb_array_elements (f_fifo) as data from db_north_location where 1=1
+	    	<!--<if test="startTime!=null">-->
+	  		<!--<![CDATA[ and to_char(f_time, 'yyyy-MM-dd HH:mm:ss')  >=  #{startTime}  ]]>-->
+	  		<!--</if>-->
+	  		<!--<if test="endTime!=null">-->
+	  		<!--<![CDATA[ and to_char(f_time, 'yyyy-MM-dd HH:mm:ss')  <=  #{endTime}  ]]>-->
+	  		<!--</if>-->
+	) t
+	where 1=1
+  	<if test="HX!=null and HX != ''">
+  		and data->>'HX'=#{HX}
+  	</if>
+  	<if test="FT!=null and FT != ''">
+  		and data->>'FT'=#{FT}
+  	</if>
+	<if test="startTime!=null">
+		<![CDATA[ and data->>'TE'  >=  #{startTime}  ]]>
+	</if>
+	<if test="endTime!=null">
+		<![CDATA[ and data->>'TE'  <=  #{endTime}  ]]>
+	</if>
+  </select>
+  
+  <!-- 统计位置上报数量-->
+  <select id="getPositionReportNum" resultType="java.lang.Integer" parameterType="java.util.ArrayList">
+  	select count(0) from (
+  		select * from ( 
+  			select jsonb_array_elements (f_fifo) as data,f_time,jsonb_array_elements (f_fifo)->>'HX' as hx  from db_north_location where 1=1
+  		) t
+  		where 1=1 
+  		<![CDATA[ and to_char(f_time, 'yyyy-MM-dd HH:mm:ss')  >=  to_char(current_date, 'yyyy-MM-dd 00:00:00') ]]>
+  		<if test="list != null and list.size > 0">
+  			and hx in 
+	  		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+	        	#{item}
+	      	</foreach>
+	  	</if>
+  		) tmp_count
+  </select>
+
+  <!-- 统计位置上报数量-->
+  <select id="getList" resultType="com.bdfint.backend.modules.gis.bean.DbNorthLocation" parameterType="map">
+	  select data from (
+	  select jsonb_array_elements (f_fifo) as data from db_north_location
+	  where 1=1
+	  )t
+	  where 1=1
+	  <if test="startTime!=null">
+		  <![CDATA[ and data->>'RT' >=  #{startTime}  ]]>
+	  </if>
+	  <if test="endTime!=null">
+		  <![CDATA[ and data->>'RT' <=  #{endTime}  ]]>
+	  </if>
+
+	  <if test="list != null and list.size > 0">
+		  and data->>'HX' in
+		  <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			  #{item}
+		  </foreach>
+	  </if>
+  </select>
+
+
+	<select id="getList1" resultType="com.bdfint.backend.modules.gis.bean.DbNorthLocation">
+		select * from (
+			select jsonb_array_elements (f_fifo)->>'FT' as FT,jsonb_array_elements (f_fifo)->>'HX' as HX,jsonb_array_elements (f_fifo)->>'TE' as TE
+			from db_north_location where 1=1 )t
+		where 1=1
+		<if test="HX">
+			and HX = #{HX}
+		</if>
+		<!--<if test="FT">-->
+			<!--and data->>'FT' = #{FT}-->
+		<!--</if>-->
+		<if test="startTime">
+			<![CDATA[ and TE >=  #{startTime}  ]]>
+		</if>
+		<if test="endTime">
+			<![CDATA[ and TE <=  #{endTime}  ]]>
+		</if>
+		order by TE desc
+	</select>
+  
+</mapper>

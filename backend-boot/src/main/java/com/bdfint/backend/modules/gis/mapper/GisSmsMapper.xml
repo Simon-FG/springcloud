@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.GisSmsMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.GisSms" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="hex_address" property="hexAddress" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="content_type" property="contentType" jdbcType="VARCHAR" />
+    <result column="card_id" property="cardId" jdbcType="VARCHAR" />
+    <result column="to_card_id" property="toCardId" jdbcType="VARCHAR" />
+    <result column="msg_type" property="msgType" jdbcType="SMALLINT" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, hex_address, content, send_time, content_type, card_id, to_card_id, msg_type, 
+    del_flag
+  </sql>
+  
+   <!-- 新增消息 -->
+  <insert id="insertGisSms" useGeneratedKeys="true" keyProperty="id" parameterType="com.bdfint.backend.modules.gis.bean.GisSms">
+ 	insert into gis_sms(hex_address, content, send_time, content_type, card_id, to_card_id, msg_type, del_flag)
+    values(#{hexAddress},#{content},#{sendTime},#{contentType},#{cardId},#{toCardId},#{msgType},#{delFlag})
+  </insert>
+  
+    <!-- 根据条件查询消息-->
+  <!--<select id="queryByParamGisSms" resultType="com.bdfint.backend.modules.gis.bean.GisSms" parameterType="com.bdfint.backend.modules.gis.bean.GisSms" >-->
+  	<!--select t.id, t.hex_address as hexAddress, t.content, t.send_time as sendTime, t.content_type as contentType, t.card_id as cardId, t.to_card_id as toCardId, t.msg_type as msgType, t.del_flag as delFlag from gis_sms t where 1=1-->
+  	<!--<if test="toCardId!=null and toCardId != ''">-->
+  		<!--and t.to_card_id like  #{toCardId} ||'%'-->
+  	<!--</if>-->
+  	<!--<if test="startTime!=null">-->
+	  	<!--<![CDATA[ and to_char(t.send_time, 'yyyy-MM-dd HH:mm:ss')  >=  #{startTime}  ]]>-->
+	<!--</if>-->
+	<!--<if test="endTime!=null">-->
+	  	<!--<![CDATA[ and to_char(t.send_time, 'yyyy-MM-dd HH:mm:ss')  <=  #{endTime}  ]]>-->
+	<!--</if>-->
+  	<!--and t.del_flag=#{delFlag} order by t.id desc-->
+  <!--</select>-->
+
+    <!-- 根据北斗卡号统计当日通信数量-->
+    <select id="getDaySum" resultType="java.lang.Integer" >
+        select count(0) from gis_sms where 1=1
+        <if test="startTime!=null">
+            <![CDATA[ and to_char(send_time, 'yyyy-MM-dd HH:mm:ss')  >=  #{startTime}  ]]>
+        </if>
+        <if test="endTime!=null">
+            <![CDATA[ and to_char(send_time, 'yyyy-MM-dd HH:mm:ss')  <=  #{endTime}  ]]>
+        </if>
+        <if test="cardId!=null">
+            and card_id = #{cardId}
+        </if>
+        <if test="toCardId!=null">
+            and to_card_id = #{toCardId}
+        </if>
+        <if test="msgType!=null">
+            and msg_type = #{msgType}
+        </if>
+    </select>
+
+  <!-- 统计位置上报数量-->
+  <select id="getSmsReportNum" resultType="java.lang.Integer" parameterType="java.util.ArrayList">
+  	select count(0) from gis_sms 
+  		where 1=1 
+  		<![CDATA[ and to_char(send_time, 'yyyy-MM-dd HH:mm:ss') >= to_char(current_date, 'yyyy-MM-dd 00:00:00') ]]>
+  		<if test="list != null and list.size > 0">
+  			and card_id in 
+	  		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+	        	#{item}
+	      	</foreach>
+	  	</if>
+  </select>
+</mapper>

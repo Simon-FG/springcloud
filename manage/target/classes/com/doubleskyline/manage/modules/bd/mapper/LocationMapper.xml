@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.doubleskyline.manage.modules.bd.mapper.LocationMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.doubleskyline.manage.modules.bd.entity.LocationEntity" id="locationMap">
+        <result property="id" column="id"/>
+        <result property="cardId" column="card_id"/>
+        <result property="terminalId" column="terminal_id"/>
+        <result property="lon" column="lon"/>
+        <result property="lat" column="lat"/>
+        <result property="angle" column="angle"/>
+        <result property="locationTime" column="location_time"/>
+        <result property="networkType" column="network_type"/>
+        <result property="speed" column="speed"/>
+        <result property="height" column="height"/>
+        <result property="receiveTime" column="receive_time"/>
+        <result property="terminalNum" column="terminal_num"/>
+        <result property="terminalType" column="terminal_type"/>
+        <result property="terminalReg" column="terminal_reg"/>
+    </resultMap>
+
+    <resultMap type="com.doubleskyline.manage.modules.bd.vo.LocVO" id="locVOMap">
+        <result property="createTime" column="location_time"/>
+        <result property="count" column="count"/>
+        <result property="type" column="type"/>
+    </resultMap>
+
+
+    <!-- 查找多个终端的最新位置记录 -->
+    <select id="queryRecentBdLocation" resultMap="locationMap">
+        select * from bd_location l where card_id in
+        <foreach collection="array" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+        and receive_time = (
+            select max(receive_time) from bd_location l1 where l1.card_id=l.card_id
+        )
+    </select>
+
+
+    <select id="getLocData" resultMap="locVOMap">
+        SELECT
+            DATE_FORMAT(location_time, '%Y-%m-%d') AS location_time,
+            COUNT(*) AS count
+        FROM
+            `bd_location`
+        WHERE
+            1 = 1
+        and card_id = #{sendCardId}
+        and location_time >= #{startTime}
+        <![CDATA[
+        and location_time <= #{endTime}
+        ]]>
+        GROUP BY
+            DATE_FORMAT(location_time, '%Y-%m-%d');
+    </select>
+
+
+    <select id="getOnLineTime" resultMap="locationMap">
+        SELECT
+        *
+        FROM
+        bd_location
+        WHERE 1=1
+        and card_id = #{cardId}
+        and location_time >= #{startTime}
+        <![CDATA[
+        and location_time <= #{endTime}
+        ]]>
+        ORDER BY location_time ASC
+    </select>
+
+    <select id="getLocCount" resultMap="locVOMap">
+        SELECT COUNT(*) count,network_type type
+        FROM bd_location
+        GROUP BY network_type
+    </select>
+
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT count(*) as count
+        FROM bd_location
+        WHERE card_id in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>;
+    </select>
+
+</mapper>

@@ -1,0 +1,157 @@
+server:
+  port: 9999
+  #address: localhost
+  jsp-servlet:
+    init-parameters:
+      development: true
+logging:
+  file: logs/backend-boot.log
+  level:
+    root: info
+    com.bdfint.backend: trace
+custom.datasource:
+  names: pg,ds2
+#  ds1.type: com.alibaba.druid.pool.DruidDataSource
+#  ds1.driverClassName: com.mysql.jdbc.Driver
+#  ds1.url: jdbc:mysql://10.10.1.113:3306/northdb?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false
+#  ds1.username: root
+#  ds1.password: root
+
+  pg.type: com.alibaba.druid.pool.DruidDataSource
+  pg.driverClassName: org.postgresql.Driver
+  pg.url: jdbc:postgresql://localhost:5432/northbd
+  pg.username: postgres
+  pg.password: postgres
+
+  ds2.type: com.alibaba.druid.pool.DruidDataSource
+  ds2.driverClassName: com.mysql.jdbc.Driver
+  ds2.url: jdbc:mysql://127.0.0.1:3306/zyyt?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=UTC
+  ds2.username: root
+  ds2.password: root
+
+spring:
+  application:
+    name: useradmin
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/zyyt?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: root
+
+    # set pool
+    initialSize: 1
+    minIdle: 1
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat
+    monitor:
+      allow: 127.0.0.1
+      deny:
+      loginUsername: admin
+      loginPassword: admin
+
+  redis:
+    is-cluster: false
+    key-prefix: backend-boot
+    host: localhost
+    port: 6379
+    password:
+    timeout: 0
+    pool:
+      max-active: 8
+      max-idle: 8
+      max-wait: -1
+      min-idle: 0
+#    cluster:
+#      max-redirects: 5
+      #nodes: 10.82.12.30:6379,10.82.12.30:6479,10.82.12.31:6379
+#      nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005,127.0.0.1:7006
+#  http:
+#    #或是在配置类（@Configuration）中注入（@Bean）MultipartConfigElement
+#    multipart:
+#      location: D:\\tmp
+  http:
+    multipart:
+      max-file-size: 5Mb
+      max-request-size: 30Mb
+# MyBatis
+mybatis:
+  type-aliases-package: com.bdfint.backend.modules
+  configuration:
+    map-underscore-to-camel-case: true
+
+mapper:
+  mappers:
+      - com.bdfint.backend.framework.common.CommonMapper
+  not-empty: false
+  identity: MYSQL
+
+pagehelper:
+  helperDialect: postgreSQL
+  reasonable: true
+  supportMethodsArguments: true
+#  默认值为pageNum=pageNum;pageSize=pageSize;count=countSql;reasonable=reasonable;pageSizeZero=pageSizeZero
+#  pageNum!= null && pageSize!= null 时，会自动分页
+  params: count=countSql
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7000/eureka/
+  instance:
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+
+#eureka.instance.preferIpAddress=true
+#eureka.instance.instance-id=${spring.cloud.client.ipAddress}:${server.port}
+#文件上传路径 空为系统默认配置
+#fileUploadPath: E:/bdweb/backend/src/main/webapp/web_image_uploads/
+#fileUploadPath: C:\Users\Administrator\Desktop\work\airbd\backend-boot\src\main\resources\static\web_image_uploads\
+fileUploadPath: F:/SVN项目/airbd/operation/src/main/webapp/end_pic_uploads
+#fileUploadPath: D:/apache-tomcat-8.5.11/webapps/northfile/web_image_uploads/
+#文件服务器地址 空为系统默认配置
+fileAccessPath: /end_pic_uploads/
+#静态文件后缀
+staticFileSuffix: .css,.js,.png,.jpg,.gif,.jpeg,.bmp,.ico,.swf,.psd,.htc,.htm,.html,.crx,.xpi,.exe,.ipa,.apk
+#动态文件后缀
+urlSuffix: .html
+#管理基础路径
+adminPath: /admin
+#前端基础路径
+frontPath:
+#踢出之前登录的/之后登录的用户 默认踢出之前登录的用户
+userKickoutAfter: false
+#同一个帐号最大会话数 默认1
+userMaxSession: 1
+#是否不允许刷新主页，不允许情况下，刷新主页会导致重新登录
+notAllowRefreshIndex: false
+#是否允许启动清空redis缓存，允许情况下，项目启动会清空所有缓存
+allowStartupEmptyCache: false
+#单点登录CAS设置
+casServerUrl: http://127.0.0.1:8180/cas
+casProjectUrl: http://127.0.0.1:8080/a
+
+#submail短信参数设置
+appid: 20936
+appkey: eee249b6387ba37082764ad1d8a43a67
+project: COv1T1
+signtype: normal
+
+feign.hystrix.enabled: true
+debug: true
+
+#位置上报，连续10分钟未上传，视为离线（单位分钟）
+offLineTime: 10
+#北斗上报时间间隔（单位秒）
+bdInterval: 4
+#4G上报时间间隔（单位秒）
+g4Interval: 5

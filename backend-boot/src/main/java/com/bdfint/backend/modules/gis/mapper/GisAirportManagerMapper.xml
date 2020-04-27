@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.GisAirportManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.GisAirportManager" >
+    <id column="gid" property="gid" jdbcType="BIGINT" />
+    <result column="objectid" property="objectid" jdbcType="BIGINT" />
+    <result column="ident" property="ident" jdbcType="VARCHAR" />
+    <result column="designator" property="designator" jdbcType="VARCHAR" />
+    <result column="ifrcap" property="ifrcap" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="magvar" property="magvar" jdbcType="VARCHAR" />
+    <result column="elevation" property="elevation" jdbcType="VARCHAR" />
+    <result column="recnav" property="recnav" jdbcType="VARCHAR" />
+    <result column="transalt" property="transalt" jdbcType="VARCHAR" />
+    <result column="translevel" property="translevel" jdbcType="VARCHAR" />
+    <result column="pubmilindi" property="pubmilindi" jdbcType="VARCHAR" />
+    <result column="airporten" property="airporten" jdbcType="VARCHAR" />
+    <result column="cycledate" property="cycledate" jdbcType="VARCHAR" />
+    <result column="airportcit" property="airportcit" jdbcType="VARCHAR" />
+    <result column="airportnam" property="airportnam" jdbcType="VARCHAR" />
+    <result column="geom" property="geom" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    gid, objectid, ident, designator, ifrcap, latitude, longitude, magvar, elevation, 
+    recnav, transalt, translevel, pubmilindi, airporten, cycledate, airportcit, airportnam, 
+    geom, del_flag
+  </sql>
+  
+  <insert id="insertGisAirport" useGeneratedKeys="true" keyProperty="id" parameterType="com.bdfint.backend.modules.gis.bean.GisAirportManager" >
+    insert into gis_airport_manager (gid, objectid, ident, 
+      designator, ifrcap, latitude, 
+      longitude, magvar, elevation, 
+      recnav, transalt, translevel, 
+      pubmilindi, airporten, cycledate, 
+      airportcit, airportnam, geom, 
+      del_flag)
+    values (#{gid,jdbcType=BIGINT}, #{objectid,jdbcType=BIGINT}, #{ident,jdbcType=VARCHAR}, 
+      #{designator,jdbcType=VARCHAR}, #{ifrcap,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR}, #{magvar,jdbcType=VARCHAR}, #{elevation,jdbcType=VARCHAR}, 
+      #{recnav,jdbcType=VARCHAR}, #{transalt,jdbcType=VARCHAR}, #{translevel,jdbcType=VARCHAR}, 
+      #{pubmilindi,jdbcType=VARCHAR}, #{airporten,jdbcType=VARCHAR}, #{cycledate,jdbcType=VARCHAR}, 
+      #{airportcit,jdbcType=VARCHAR}, #{airportnam,jdbcType=VARCHAR}, #{geom,jdbcType=VARCHAR}, 
+      #{delFlag,jdbcType=CHAR})
+  </insert>
+  
+  <!--根据多条件查询机场信息 -->
+  <select id="queryByParamGisAirport" resultType="com.bdfint.backend.modules.gis.bean.GisAirportManager" parameterType="com.bdfint.backend.modules.gis.bean.GisAirportManager" >
+  	SELECT t.gid, t.objectid, t.ident, t.designator, t.ifrcap, t.latitude, t.longitude, t.magvar, t.elevation, 
+    t.recnav, t.transalt, t.translevel, t.pubmilindi, t.airporten, t.cycledate, t.airportcit, t.airportnam, 
+    ST_AsEWKT(t.geom) as geom FROM gis_airport_manager t  WHERE 1=1 
+  	<if test="value!=null and value != ''">
+  		and (t.ident like #{value} ||'%' or t.designator like #{value} ||'%' or t.airportnam like #{value} ||'%')
+  	</if>
+  		and t.del_flag=#{delFlag}
+  </select>
+  
+  <!-- 伪删除  -->
+  <update id="delBatch">
+    update gis_airport_manager
+    set del_flag=1
+    WHERE id IN
+    <foreach collection="array" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+</mapper>

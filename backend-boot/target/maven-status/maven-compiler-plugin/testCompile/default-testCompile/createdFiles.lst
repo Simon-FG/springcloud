@@ -1,0 +1,5 @@
+com\bdfint\backend\service\TAreaService.class
+com\bdfint\backend\DataLoadTest.class
+com\bdfint\backend\BaseTest.class
+com\bdfint\backend\RedisPubSubTest.class
+com\bdfint\backend\service\impl\TAreaServiceImpl.class

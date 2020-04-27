@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.sys.mapper.CrmNorthCardMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.sys.bean.CrmNorthCard" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="card_id" property="cardId" jdbcType="VARCHAR" />
+    <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+    <result column="card_version" property="cardVersion" jdbcType="CHAR" />
+    <result column="app_purpose" property="appPurpose" jdbcType="CHAR" />
+    <result column="card_leven" property="cardLeven" jdbcType="VARCHAR" />
+    <result column="lon" property="lon" jdbcType="VARCHAR" />
+    <result column="lat" property="lat" jdbcType="VARCHAR" />
+    <result column="alt" property="alt" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="location_type" property="locationType" jdbcType="VARCHAR" />
+    <result column="parent_card_id" property="parentCardId" jdbcType="VARCHAR" />
+    <result column="broadcost_code" property="broadcostCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="note_time" property="noteTime" jdbcType="TIMESTAMP" />
+    <result column="loc_update_time" property="locUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="usage_mode" property="usageMode" jdbcType="VARCHAR" />
+    <result column="frequentncy" property="frequentncy" jdbcType="VARCHAR" />
+    <result column="usage_area" property="usageArea" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="INTEGER" />
+    <result column="operate_price" property="operatePrice" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="set_plane_color" property="setPlaneColor" jdbcType="VARCHAR" />
+    <result column="set_plane_color" property="setPlaneColor" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <!-- 根据北斗卡ID修改信息 -->
+   <update id="updateByCardIdNorthCard" parameterType="com.bdfint.backend.modules.sys.bean.CrmNorthCard">
+     update crm_north_card t set t.lon=#{lon} ,t.lat=#{lat},t.alt=#{alt},t.angle=#{angle},t.location_type=#{locationType}, t.set_plane_color=#{setPlaneColor}, t.tag=#{tag} ,
+            t.card_type=#{cardType} , t.frequentncy=#{frequentncy} ,  t.card_leven=#{cardLeven} , t.app_purpose=#{appPurpose},
+            t.parent_card_id=#{parentCardId} , t.user_id=#{userId} ,  t.usage_mode=#{usageMode} , t.usage_area=#{usageArea},
+            t.del_flag= 0 , t.status=#{status} , t.broadcost_code=#{broadcostCode}
+     where t.card_id=#{cardId}
+   </update> 
+   
+   <!--根据用户ID查询北斗卡及飞行器相关信息 -->
+  <select id="queryNorthCard" resultType="com.bdfint.backend.modules.sys.bean.CrmNorthCard" parameterType="com.bdfint.backend.modules.sys.bean.CrmNorthCard" >
+  	select t.*,m.tail_code as tailCode from crm_north_card t left join crm_airplane_card_bind b on b.card_id=t.card_id left join crm_airplane_manager m on m.tail_code=b.airplane_id where t.user_id=#{userId} and t.del_flag=#{delFlag} and m.del_flag=#{delFlag} and b.del_flag=#{delFlag}
+  </select>
+
+    <!--根据用户ID查询查询北斗卡及终端 -->
+  <select id="queryNorthCardAndTerminal" resultType="com.bdfint.backend.modules.sys.bean.CrmNorthCard" parameterType="com.bdfint.backend.modules.sys.bean.CrmNorthCard" >
+  	select t.*,m.tail_code as tailCode , m.type as type from crm_north_card t left join crm_airplane_card_bind b on b.card_id=t.card_id left join crm_airplane_manager m on m.tail_code=b.airplane_id
+  	where 1 = 1
+  	<if test="userId != null and userId != ''">
+  	  and t.user_id = #{userId}
+    </if>
+  	and t.del_flag=#{delFlag}
+  </select>
+</mapper>

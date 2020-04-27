@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.sys.mapper.SysCompanyManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.sys.bean.SysCompanyManager" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="corporation" property="corporation" jdbcType="VARCHAR" />
+    <result column="telphone" property="telphone" jdbcType="VARCHAR" />
+    <result column="account_bank" property="accountBank" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="texpayer_code" property="texpayerCode" jdbcType="VARCHAR" />
+    <result column="business_licence_img" property="businessLicenceImg" jdbcType="VARCHAR" />
+    <result column="confirm" property="confirm" jdbcType="CHAR" />
+    <result column="website" property="website" jdbcType="VARCHAR" />
+    <result column="poster" property="poster" jdbcType="VARCHAR" />
+    <result column="reg_time" property="regTime" jdbcType="TIMESTAMP" />
+    <result column="reg_userid" property="regUserid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company, address, corporation, telphone, account_bank, account, texpayer_code, 
+    business_licence_img, confirm, website, poster, reg_time, reg_userid
+  </sql>
+
+  <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.bdfint.backend.modules.sys.bean.SysCompanyManager">
+    insert into sys_company_manager(company,hand_idcard_img,business_licence_img,reg_time,reg_userid,confirm)
+    VALUES (#{company},#{handIdcardImg},#{businessLicenceImg},#{regTime},#{regUserid},#{confirm})
+  </insert>
+</mapper>

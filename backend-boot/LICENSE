@@ -1,0 +1,36 @@
+spring.application.name=zuul
+server.port=7005
+zuul.add-host-header=true
+#zuul.addProxyHeaders = false 
+#zuul.prefix=/useradmin/**
+#zuul.stripPrefix=false
+# routes to serviceId
+#zuul.routes.api-a.path=/api-a/**
+#zuul.routes.api-a.serviceId=service-A
+
+zuul.routes.api-b.path=/api-b/**
+zuul.routes.api-b.serviceId=ribbon
+
+zuul.routes.api-b.path=/service-b/**
+zuul.routes.api-b.serviceId=BACKCLIENT-MYSQLX
+
+zuul.routes.useradmin.path=/admin/**
+zuul.routes.useradmin.serviceId=useradmin
+zuul.routes.useradmin.stripPrefix=false
+zuul.routes.useradmin.sensitive-headers=true
+zuul.routes.useradmin.custom-sensitive-headers=true
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 30000
+
+
+
+zuul.routes.pre.path=/test/**
+zuul.routes.pre.url=http://192.168.0.45:8080/
+zuul.routes.pre.stripPrefix=false
+zuul.routes.pre.sensitive-headers=true
+zuul.routes.pre.custom-sensitive-headers=true
+
+# routes to url mmb-eureka-client-subject
+zuul.routes.api-a-url.path=/api-a-url/**
+zuul.routes.api-a-url.url=http://www.baidu.com/
+
+eureka.client.serviceUrl.defaultZone=http://localhost:7000/eureka/

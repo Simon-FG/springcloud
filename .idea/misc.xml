@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/zheng-upms/zheng-upms-server" />
+  </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/backclient-mysql/pom.xml" />
+        <option value="$PROJECT_DIR$/backend-boot/pom.xml" />
+        <option value="$PROJECT_DIR$/backservice-rabbitmq/pom.xml" />
+        <option value="$PROJECT_DIR$/config-server/pom.xml" />
+        <option value="$PROJECT_DIR$/hystrix-feign-server/pom.xml" />
+        <option value="$PROJECT_DIR$/operation/pom.xml" />
+        <option value="$PROJECT_DIR$/register-server/pom.xml" />
+        <option value="$PROJECT_DIR$/zuul-server/pom.xml" />
+        <option value="$PROJECT_DIR$/zheng-upms/pom.xml" />
+        <option value="$PROJECT_DIR$/manage/pom.xml" />
+        <option value="$PROJECT_DIR$/core/pom.xml" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/zheng-upms/pom.xml" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/manage/target" />
+  </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="trunkUrl" value="https://47.105.190.219/svn/BDPlatform/ZYYT" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WebPackConfiguration">
+    <option name="path" value="$PROJECT_DIR$/beidou/build/webpack.base.conf.js" />
+  </component>
+</project>

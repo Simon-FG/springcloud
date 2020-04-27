@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dbs.mapper.SysJjfaMapper" >
+  <resultMap id="BaseResultMap" type="com.dbs.model.SysJjfa" >
+    <id column="item_id" property="faId" jdbcType="INTEGER" />
+    <result column="name" property="faName" jdbcType="VARCHAR" />
+    <result column="content" property="faContent" jdbcType="VARCHAR" />
+    <result column="essentials" property="faGs" jdbcType="VARCHAR" />
+    <result column="banner" property="faBanner" jdbcType="VARCHAR" />
+    <result column="ico" property="faIco" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+    <result column="menu_id" property="menuId" jdbcType="INTEGER" />
+  </resultMap>
+  <!--<resultMap id="BaseResultMap1" type="com.dbs.model.SysJjfa" >-->
+    <!--<id column="fa_id" property="faId" jdbcType="INTEGER" />-->
+    <!--<result column="fa_name" property="faName" jdbcType="VARCHAR" />-->
+    <!--<result column="fa_content" property="faContent" jdbcType="VARCHAR" />-->
+    <!--<result column="fa_banner" property="faBanner" jdbcType="VARCHAR" />-->
+    <!--<result column="fa_ico" property="faIco" jdbcType="VARCHAR" />-->
+    <!--<result column="fb_time" property="fbTime" jdbcType="TIMESTAMP" />-->
+    <!--<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />-->
+    <!--<result column="menu_id" property="menuId" jdbcType="INTEGER" />-->
+    <!--<collection property="sysJjfaSonList" column="fa_id" javaType="ArrayList" ofType="com.dbs.model.SysJjfaSon" select="selectByParentId" />&lt;!&ndash;fetchType="eager"&ndash;&gt;-->
+  <!--</resultMap>-->
+  <resultMap id="BaseResultMap1" type="com.dbs.model.SysJjfa" >
+    <id column="item_id" property="faId" jdbcType="INTEGER" />
+    <result column="name" property="faName" jdbcType="VARCHAR" />
+    <result column="content" property="faContent" jdbcType="VARCHAR" />
+    <result column="essentials" property="faGs" jdbcType="VARCHAR" />
+    <result column="banner" property="faBanner" jdbcType="VARCHAR" />
+    <result column="ico" property="faIco" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+    <result column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    
+    <result column="fatdId" property="fatdId" jdbcType="INTEGER" />
+    <result column="fatdName" property="fatdName" jdbcType="VARCHAR" />
+    <result column="fatdContent" property="fatdContent" jdbcType="VARCHAR" />
+    <result column="fatdIco" property="fatdIco" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    item_id, name, content, essentials, banner, ico, update_time, update_by, menu_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_solution_item
+    where item_id = #{faId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectOneWithSonByMenuId" resultType="java.util.HashMap"  resultMap="BaseResultMap1" parameterType="java.lang.String">
+    select a.item_id,a.name,a.content,a.essentials,a.banner,a.ico,a.update_by,a.menu_id,
+    b.name as fatdName,b.content as fatdContent,b.ico as fatdIco from 
+    sys_solution_item a
+    INNER JOIN sys_solution_item_expand b
+    ON a.item_id = b.parent_id
+    WHERE a.menu_id = #{menuId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectListInHome" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM sys_solution_item
+  </select>
+</mapper>

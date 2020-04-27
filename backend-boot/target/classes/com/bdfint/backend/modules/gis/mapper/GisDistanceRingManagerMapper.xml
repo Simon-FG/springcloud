@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.GisDistanceRingManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.GisDistanceRingManager" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="lon" property="lon" jdbcType="DOUBLE" />
+    <result column="lat" property="lat" jdbcType="DOUBLE" />
+    <result column="radius" property="radius" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="style_id" property="styleId" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name,user_id, lon, lat, radius, count, style_id,del_flag,create_time
+  </sql>
+  
+    <!-- 新增距离环 -->
+  <insert id="insertDistanceRing" useGeneratedKeys="true" keyProperty="id" parameterType="com.bdfint.backend.modules.gis.bean.GisDistanceRingManager">
+ 	insert into gis_distance_ring_manager(name,user_id, lon, lat,radius,count,style_id,del_flag,create_time)
+    values(#{name},#{userId},#{lon},#{lat},#{radius},#{count},#{styleId},#{delFlag},#{createTime})
+  </insert>
+  
+  
+  <!-- 根据条件查询距离环 -->
+  <select id="queryByParamDistanceRing" resultType="com.bdfint.backend.modules.gis.bean.GisDistanceRingManager" parameterType="com.bdfint.backend.modules.gis.bean.GisDistanceRingManager" >
+  	select t.* from gis_distance_ring_manager t where t.del_flag=#{delFlag}
+  	<if test="userId!=null and userId != ''">
+  		and t.user_id=#{userId}
+  	</if>
+  	order by t.id desc
+  </select>
+  
+  <!-- 伪删除  -->
+  <update id="delBatch">
+    update gis_distance_ring_manager
+    set del_flag=1
+    WHERE id IN
+    <foreach collection="array" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+</mapper>

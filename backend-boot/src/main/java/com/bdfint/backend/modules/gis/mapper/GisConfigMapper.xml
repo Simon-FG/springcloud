@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.GisConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.GisConfig" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="ioc_color" property="iocColor" jdbcType="VARCHAR" />
+    <result column="font_color" property="fontColor" jdbcType="VARCHAR" />
+    <result column="font_size" property="fontSize" jdbcType="INTEGER" />
+    <result column="font_edge_color" property="fontEdgeColor" jdbcType="VARCHAR" />
+    <result column="is_label_all" property="isLabelAll" jdbcType="CHAR" />
+    <result column="is_label_beidou" property="isLabelBeidou" jdbcType="CHAR" />
+    <result column="label_beidou_perfix" property="labelBeidouPerfix" jdbcType="VARCHAR" />
+    <result column="label_beidou_suffix" property="labelBeidouSuffix" jdbcType="VARCHAR" />
+    <result column="is_label_biaoji" property="isLabelBiaoji" jdbcType="CHAR" />
+    <result column="label_biaoji_perfix" property="labelBiaojiPerfix" jdbcType="VARCHAR" />
+    <result column="label_biaoji_suffix" property="labelBiaojiSuffix" jdbcType="VARCHAR" />
+    <result column="is_label_jiwei" property="isLabelJiwei" jdbcType="CHAR" />
+    <result column="label_jiwei_perfix" property="labelJiweiPerfix" jdbcType="VARCHAR" />
+    <result column="label_jiwei_suffix" property="labelJiweiSuffix" jdbcType="VARCHAR" />
+    <result column="is_label_xhlx" property="isLabelXhlx" jdbcType="CHAR" />
+    <result column="label_xhlx_perfix" property="labelXhlxPerfix" jdbcType="VARCHAR" />
+    <result column="label_xhlx_suffix" property="labelXhlxSuffix" jdbcType="VARCHAR" />
+    <result column="is_label_H" property="isLabelH" jdbcType="CHAR" />
+    <result column="label_H_perfix" property="labelHPerfix" jdbcType="VARCHAR" />
+    <result column="label_H_suffix" property="labelHSuffix" jdbcType="VARCHAR" />
+    <result column="is_label_V" property="isLabelV" jdbcType="CHAR" />
+    <result column="label_V_perfix" property="labelVPerfix" jdbcType="VARCHAR" />
+    <result column="label_V_suffix" property="labelVSuffix" jdbcType="VARCHAR" />
+    <result column="is_label_D" property="isLabelD" jdbcType="CHAR" />
+    <result column="label_D_perfix" property="labelDPerfix" jdbcType="VARCHAR" />
+    <result column="label_D_suffix" property="labelDSuffix" jdbcType="VARCHAR" />
+    <result column="is_label_S" property="isLabelS" jdbcType="CHAR" />
+    <result column="label_S_perfix" property="labelSPerfix" jdbcType="VARCHAR" />
+    <result column="label_S_suffix" property="labelSSuffix" jdbcType="VARCHAR" />
+    <result column="center_lon" property="centerLon" jdbcType="DOUBLE" />
+    <result column="center_lat" property="centerLat" jdbcType="DOUBLE" />
+    <result column="zoom_level" property="zoomLevel" jdbcType="INTEGER" />
+    <result column="map_bgcloor" property="mapBgcloor" jdbcType="VARCHAR" />
+    <result column="angle" property="angle" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="track_display_time" property="trackDisplayTime" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, ioc_color, font_color, font_size, font_edge_color, is_label_all, is_label_beidou, 
+    label_beidou_perfix, label_beidou_suffix, is_label_biaoji, label_biaoji_perfix, label_biaoji_suffix, 
+    is_label_jiwei, label_jiwei_perfix, label_jiwei_suffix, is_label_xhlx, label_xhlx_perfix, 
+    label_xhlx_suffix, is_label_H, label_H_perfix, label_H_suffix, is_label_V, label_V_perfix, 
+    label_V_suffix, is_label_D, label_D_perfix, label_D_suffix, is_label_S, label_S_perfix, 
+    label_S_suffix, center_lon, center_lat, zoom_level, map_bgcloor, angle,del_flag,track_display_time,
+  </sql>
+
+  <insert id="insertGisConfig" parameterType="com.bdfint.backend.modules.gis.bean.GisConfig" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gis_config (user_id, ioc_color, font_color, 
+      font_size, font_edge_color, is_label_all, 
+      is_label_beidou, label_beidou_perfix, label_beidou_suffix, 
+      is_label_biaoji, label_biaoji_perfix, label_biaoji_suffix, 
+      is_label_jiwei, label_jiwei_perfix, label_jiwei_suffix, 
+      is_label_xhlx, label_xhlx_perfix, label_xhlx_suffix, 
+      is_label_H, label_H_perfix, label_H_suffix, 
+      is_label_V, label_V_perfix, label_V_suffix, 
+      is_label_D, label_D_perfix, label_D_suffix, 
+      is_label_S, label_S_perfix, label_S_suffix, 
+      center_lon, center_lat, zoom_level, 
+      map_bgcloor, angle,del_flag,track_display_time,
+      is_show, show_perfix, show_suffix, bd_point_color, g4_point_color, is_auto_play)
+    values (#{userId,jdbcType=VARCHAR}, #{iocColor,jdbcType=VARCHAR}, #{fontColor,jdbcType=VARCHAR}, 
+      #{fontSize,jdbcType=INTEGER}, #{fontEdgeColor,jdbcType=VARCHAR}, #{isLabelAll,jdbcType=CHAR}, 
+      #{isLabelBeidou,jdbcType=CHAR}, #{labelBeidouPerfix,jdbcType=VARCHAR}, #{labelBeidouSuffix,jdbcType=VARCHAR}, 
+      #{isLabelBiaoji,jdbcType=CHAR}, #{labelBiaojiPerfix,jdbcType=VARCHAR}, #{labelBiaojiSuffix,jdbcType=VARCHAR}, 
+      #{isLabelJiwei,jdbcType=CHAR}, #{labelJiweiPerfix,jdbcType=VARCHAR}, #{labelJiweiSuffix,jdbcType=VARCHAR}, 
+      #{isLabelXhlx,jdbcType=CHAR}, #{labelXhlxPerfix,jdbcType=VARCHAR}, #{labelXhlxSuffix,jdbcType=VARCHAR}, 
+      #{isLabelH,jdbcType=CHAR}, #{labelHPerfix,jdbcType=VARCHAR}, #{labelHSuffix,jdbcType=VARCHAR}, 
+      #{isLabelV,jdbcType=CHAR}, #{labelVPerfix,jdbcType=VARCHAR}, #{labelVSuffix,jdbcType=VARCHAR}, 
+      #{isLabelD,jdbcType=CHAR}, #{labelDPerfix,jdbcType=VARCHAR}, #{labelDSuffix,jdbcType=VARCHAR}, 
+      #{isLabelS,jdbcType=CHAR}, #{labelSPerfix,jdbcType=VARCHAR}, #{labelSSuffix,jdbcType=VARCHAR}, 
+      #{centerLon,jdbcType=DOUBLE}, #{centerLat,jdbcType=DOUBLE}, #{zoomLevel,jdbcType=INTEGER}, 
+      #{mapBgcloor,jdbcType=VARCHAR}, #{angle,jdbcType=INTEGER},#{delFlag,jdbcType=CHAR},#{trackDisplayTime,jdbcType=INTEGER},
+      #{isShow}, #{showPerfix}, #{showSuffix}, #{bdPointColor}, #{g4PointColor}, #{isAutoPlay})
+  </insert>
+  
+  <!-- 根据用户查询低空平台基本设置和通航设置 -->
+  <select id="queryByUserIdGisConfig" resultType="com.bdfint.backend.modules.gis.bean.GisConfig" parameterType="com.bdfint.backend.modules.gis.bean.GisConfig" >
+  	select t.* from gis_config t where t.user_id=#{userId} and t.del_flag=#{delFlag}
+  </select>
+  
+  
+</mapper>

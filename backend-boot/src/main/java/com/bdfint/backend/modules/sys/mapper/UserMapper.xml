@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.sys.mapper.UserMapper">
+
+
+    <sql id="Base_Column_List">
+        id, company_id, office_id, login_name, password, no, name, email, phone, mobile,
+        user_type, photo, login_ip, login_date, login_flag, create_by, create_date, update_by,
+        update_date, remarks, del_flag, real_name, id_nomber, upload_id_file1, upload_id_file2,
+        is_confirm
+    </sql>
+
+
+    <sql id="user_col_list">
+        a.id, a.company_id, a.office_id, a.login_name, a.password, a.no, a.name, a.email, a.phone, a.mobile,
+        a.user_type, a.photo, a.login_ip, a.login_date, a.login_flag, a.create_by, a.create_date, a.update_by,
+        a.update_date, a.remarks, a.del_flag, b.real_name as realName, b.id_nomber as idNomber, b.upload_id_file1 as uploadIdFile1, b.upload_id_file2 as uploadIdFile2,
+        a.is_confirm, b.company as companyName, b.hand_idcard_img as handIdcardImg, b.business_licence_img as businessLicenceImg, b.cause, b.telphone, b.id as certifiedId
+    </sql>
+
+    <!-- 删除用户和角色关联表数据 -->
+    <delete id="deleteUserRoleByUserId">
+        DELETE FROM sys_user_role WHERE user_id = #{userId}
+    </delete>
+
+    <!-- 插入用户和角色关联表数据 -->
+    <insert id="insertUserRole">
+        INSERT INTO sys_user_role(user_id, role_id)
+        <foreach collection="roleList" item="role" separator=" union all ">
+            SELECT #{id}, #{role.id}
+        </foreach>
+    </insert>
+
+    <!-- 根据roleId查询用户 -->
+    <select id="selectUserByRoleId" resultType="User">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_user a
+        LEFT JOIN sys_user_role sur ON sur.user_id = a.id
+        WHERE a.del_flag = 0 AND sur.role_id = #{roleId}
+    </select>
+
+    <select id="selectUserContainCompany" resultType="com.bdfint.backend.modules.sys.bean.User">
+        SELECT
+        <include refid="user_col_list"/>
+        FROM sys_user a LEFT JOIN sys_user_certified b ON a.id = b.reg_userid
+        <where>
+            a.del_flag != '1'
+            <if test="loginName">
+              AND a.login_name LIKE CONCAT('%',#{loginName},'%')
+            </if>
+            <if test="name">
+                AND a.name LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="realName">
+                AND b.real_name LIKE CONCAT('%',#{realName},'%')
+            </if>
+            <if test="mobile">
+                AND a.mobile = #{mobile}
+            </if>
+            <if test="companyName">
+                AND b.company LIKE CONCAT('%',#{companyName},'%')
+            </if>
+            <if test="isReq">
+                AND a.is_confirm IN ('1','2')
+            </if>
+            <if test="isConfirm">
+                AND a.is_confirm = #{isConfirm}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

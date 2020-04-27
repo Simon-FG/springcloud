@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dbs.mapper.SysYjMapper" >
+  <resultMap id="BaseResultMap" type="com.dbs.model.SysYj" >
+    <id column="item_id" property="yjId" jdbcType="INTEGER" />
+    <result column="name" property="yjName" jdbcType="VARCHAR" />
+    <result column="byname" property="yjBm" jdbcType="VARCHAR" />
+    <result column="describe" property="yjMs" jdbcType="VARCHAR" />
+    <result column="price" property="yjPrice" jdbcType="DECIMAL" />
+    <result column="hardware_img" property="yjImg" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="item_type" property="itemType" jdbcType="CHAR" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMapfz" type="com.dbs.model.SysYj" >
+    <id column="item_id" property="yjId" jdbcType="INTEGER" />
+    <result column="name" property="yjName" jdbcType="VARCHAR" />
+    <result column="byname" property="yjBm" jdbcType="VARCHAR" />
+    <result column="describe" property="yjMs" jdbcType="VARCHAR" />
+    <result column="price" property="yjPrice" jdbcType="DECIMAL" />
+    <result column="hardware_img" property="yjImg" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="item_type" property="itemType" jdbcType="CHAR" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+   
+    <result column="yjgnId" property="yjgnId" jdbcType="INTEGER" />
+    <result column="yjgnName" property="yjgnName" jdbcType="VARCHAR" />
+    <result column="yjgnContent" property="yjgnContent" jdbcType="VARCHAR" />
+    <result column="yjgnImg" property="yjgnImg" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    item_id, name, byname, describe, price, hardware_img, update_time, menu_id, item_type, update_by
+  </sql>
+  
+  <select id="queryYjByPage"  resultType="java.util.HashMap" parameterType="java.util.HashMap" >
+	select item_id as yjId, name as yjName, price as yjPrice, `describe` as yjMs, hardware_img as yjImg, menu_id as menuId from sys_hardware_item
+	<where>
+		<if test="yjId"> 
+			and item_Id = #{yjId,jdbcType=INTEGER}
+		</if>
+		<if test="yjName"> 
+			and name = #{yjName,jdbcType=VARCHAR}
+		</if>
+	</where>
+	order by item_id asc;
+  </select>
+  
+   <select id="queryYjdetailByPage" resultType="java.util.HashMap"  resultMap="BaseResultMapfz" parameterType="java.lang.Integer">
+    select a.item_id,a.name,a.byname,a.describe,a.price,a.hardware_img,a.menu_id,a.item_type,
+    b.name as yjgnName,b.content as yjgnContent,b.function_img as yjgnImg 
+    from sys_hardware_item a INNER JOIN sys_hardware_item_expand b ON a.item_id = b.parent_id where a.item_id = #{yjId,jdbcType=INTEGER}
+  </select>
+
+</mapper>

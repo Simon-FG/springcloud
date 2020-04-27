@@ -1,0 +1,270 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "",
+      "type": "com.bdfint.backend.framework.config.SystemProperties"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "name": "spring.datasource",
+      "type": "com.bdfint.backend.framework.config.DruidProperties"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "name": "spring.datasource.monitor",
+      "sourceMethod": "getMonitor()",
+      "type": "com.bdfint.backend.framework.config.DruidProperties$Monitor"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.RedisConfig",
+      "name": "spring.redis",
+      "type": "com.bdfint.backend.framework.config.RedisConfig"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.RedisConfig",
+      "name": "spring.redis.cluster",
+      "sourceMethod": "getCluster()",
+      "type": "com.bdfint.backend.framework.config.RedisConfig$Cluster"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.RedisConfig",
+      "name": "spring.redis.pool",
+      "sourceMethod": "getPool()",
+      "type": "com.bdfint.backend.framework.config.RedisConfig$Pool"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "admin-path",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "defaultValue": false,
+      "name": "allow-startup-empty-cache",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "appid",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "appkey",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "defaultValue": 0,
+      "name": "bd-interval",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "cas-project-url",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "cas-server-url",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "file-access-path",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "file-upload-path",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "front-path",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "defaultValue": 0,
+      "name": "g4-interval",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "defaultValue": false,
+      "name": "not-allow-refresh-index",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "defaultValue": 0,
+      "name": "off-line-time",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "project",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "signtype",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "name": "spring.datasource.driver-class-name",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "name": "spring.datasource.filters",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "defaultValue": 0,
+      "name": "spring.datasource.initial-size",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "defaultValue": 0,
+      "name": "spring.datasource.max-active",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "defaultValue": 0,
+      "name": "spring.datasource.max-pool-prepared-statement-per-connection-size",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "defaultValue": 0,
+      "name": "spring.datasource.max-wait",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "defaultValue": 0,
+      "name": "spring.datasource.min-evictable-idle-time-millis",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "defaultValue": 0,
+      "name": "spring.datasource.min-idle",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "name": "spring.datasource.password",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "defaultValue": false,
+      "name": "spring.datasource.pool-prepared-statements",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "defaultValue": false,
+      "name": "spring.datasource.test-on-borrow",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "defaultValue": false,
+      "name": "spring.datasource.test-on-return",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "defaultValue": false,
+      "name": "spring.datasource.test-while-idle",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "defaultValue": 0,
+      "name": "spring.datasource.time-between-eviction-runs-millis",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "name": "spring.datasource.type",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "name": "spring.datasource.url",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "name": "spring.datasource.username",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.DruidProperties",
+      "name": "spring.datasource.validation-query",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.RedisConfig",
+      "name": "spring.redis.host",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.RedisConfig",
+      "name": "spring.redis.key-prefix",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.RedisConfig",
+      "name": "spring.redis.password",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.RedisConfig",
+      "defaultValue": 0,
+      "name": "spring.redis.port",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.RedisConfig",
+      "defaultValue": 0,
+      "name": "spring.redis.timeout",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "static-file-suffix",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "name": "url-suffix",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "defaultValue": false,
+      "name": "user-kickout-after",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.bdfint.backend.framework.config.SystemProperties",
+      "defaultValue": 0,
+      "name": "user-max-session",
+      "type": "java.lang.Integer"
+    }
+  ]
+}

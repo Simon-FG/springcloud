@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.sys.mapper.CrmQuestionAnswerMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.sys.bean.CrmQuestionAnswer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="feedback" property="feedback" jdbcType="VARCHAR" />
+    <result column="user_by" property="userBy" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <collection property="imgs" ofType="com.bdfint.backend.modules.sys.bean.CrmQuestionAnswerImg">
+      <result column="i_id" property="id"/>
+      <result column="zip_img" property="zipImg"/>
+      <result column="img" property="img"/>
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List1" >
+    a.id, `type`, content, status, feedback, user_by, start_time, end_time, user_id, del_flag
+  </sql>
+    <sql id="Img_Colum_list">
+        i.id as i_id, i.zip_img, i.img
+    </sql>
+
+    <!--真删除-->
+    <delete id="delBatch1">
+        DELETE FROM crm_question_answer
+        WHERE id IN
+        <foreach collection="array" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--假删除-->
+    <update id="delBatch">
+        UPDATE crm_question_answer
+        SET del_flag = 1
+        WHERE id IN
+        <foreach collection="array" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+    <!--级联分页查询-->
+    <select id="findListByPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List1"/>,
+        <include refid="Img_Colum_list"/>
+        FROM crm_question_answer a LEFT OUTER JOIN crm_question_answer_img i ON a.id = i.parent_id
+        <where>
+            del_flag != 1
+            <if test="userId">
+                AND user_id = #{userId}
+            </if>
+            <if test="userBy">
+                AND user_by = #{userBy}
+            </if>
+            <if test="type">
+                AND type = #{type}
+            </if>
+            <if test="status">
+                AND status = #{status}
+            </if>
+            <if test="startAt">
+                AND start_time &gt;= #{startAt}
+            </if>
+            <if test="endAt">
+                AND start_time &lt;= #{endAt}
+            </if>
+        </where>
+        ORDER BY id
+    </select>
+
+    <insert id="addOne" parameterType="com.bdfint.backend.modules.sys.bean.CrmQuestionAnswer" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into crm_question_answer
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="type != null" >
+                `type`,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="feedback != null" >
+                feedback,
+            </if>
+            <if test="userBy != null" >
+                user_by,
+            </if>
+            <if test="startTime != null" >
+                start_time,
+            </if>
+            <if test="endTime != null" >
+                end_time,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="delFlag != null" >
+                del_flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="type != null" >
+                #{type},
+            </if>
+            <if test="content != null" >
+                #{content},
+            </if>
+            <if test="status != null" >
+                #{status},
+            </if>
+            <if test="feedback != null" >
+                #{feedback},
+            </if>
+            <if test="userBy != null" >
+                #{userBy},
+            </if>
+            <if test="startTime != null" >
+                #{startTime},
+            </if>
+            <if test="endTime != null" >
+                #{endTime},
+            </if>
+            <if test="userId != null" >
+                #{userId},
+            </if>
+            <if test="delFlag != null" >
+                #{delFlag},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

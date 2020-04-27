@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dbs.mapper.SysJjfaSonMapper" >
+  <resultMap id="BaseResultMap" type="com.dbs.model.SysJjfaSon" >
+    <result column="id" property="fatdId" jdbcType="INTEGER" />
+    <result column="name" property="fatdName" jdbcType="VARCHAR" />
+    <result column="content" property="fatdContent" jdbcType="VARCHAR" />
+    <result column="ico" property="fatdIco" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+  </resultMap>
+    <sql id="Base_Column_List" >
+        id, name, content, ico, parent_id
+    </sql>
+
+  <select id="selectByParentId" resultMap="BaseResultMap">
+      SELECT
+      <include refid="Base_Column_List"/>
+      FROM sys_solution_item_expand a
+      WHERE a.parent_id=#{parentId}
+  </select>
+</mapper>

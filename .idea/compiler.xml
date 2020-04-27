@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="backclient-mysql" />
+        <module name="backend-boot" />
+        <module name="backservice-rabbitmq" />
+        <module name="config-server" />
+        <module name="core" />
+        <module name="eureka-sever" />
+        <module name="hystrix-feign-server" />
+        <module name="manage" />
+        <module name="operation" />
+        <module name="zuul-server" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="backclient-mysql" target="1.8" />
+      <module name="backend-boot" target="1.8" />
+      <module name="backend-user" target="1.8" />
+      <module name="backservice-rabbitmq" target="1.8" />
+      <module name="config-server" target="1.7" />
+      <module name="core" target="1.8" />
+      <module name="eureka-sever" target="1.7" />
+      <module name="hystrix-feign-server" target="1.8" />
+      <module name="manage" target="1.8" />
+      <module name="operation" target="1.8" />
+      <module name="zuul-server" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="eureka-sever" options="" />
+    </option>
+  </component>
+</project>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.GisEnrouteManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.GisEnrouteManager" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="routeid" property="routeid" jdbcType="VARCHAR" />
+    <result column="geom" property="geom" jdbcType="OTHER" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, routeid, geom, del_flag
+  </sql>
+  <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from gis_enroute_manager
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gis_enroute_manager
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bdfint.backend.modules.gis.bean.GisEnrouteManager" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      postgresql
+    </selectKey>
+    insert into gis_enroute_manager (routeid, geom, del_flag
+      )
+    values (#{routeid,jdbcType=VARCHAR}, #{geom,jdbcType=OTHER}, #{delFlag,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bdfint.backend.modules.gis.bean.GisEnrouteManager" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      postgresql
+    </selectKey>
+    insert into gis_enroute_manager
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="routeid != null" >
+        routeid,
+      </if>
+      <if test="geom != null" >
+        geom,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="routeid != null" >
+        #{routeid,jdbcType=VARCHAR},
+      </if>
+      <if test="geom != null" >
+        #{geom,jdbcType=OTHER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bdfint.backend.modules.gis.bean.GisEnrouteManager" >
+    update gis_enroute_manager
+    <set >
+      <if test="routeid != null" >
+        routeid = #{routeid,jdbcType=VARCHAR},
+      </if>
+      <if test="geom != null" >
+        geom = #{geom,jdbcType=OTHER},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bdfint.backend.modules.gis.bean.GisEnrouteManager" >
+    update gis_enroute_manager
+    set routeid = #{routeid,jdbcType=VARCHAR},
+      geom = #{geom,jdbcType=OTHER},
+      del_flag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>-->
+
+    <!--根据多条件查询机场信息 -->
+    <select id="queryByParamGisEnroute" resultType="com.bdfint.backend.modules.gis.bean.GisEnrouteManager" >
+        SELECT id, routeid, ST_AsEWKT(t.geom) as geom FROM gis_enroute_manager t  WHERE 1=1
+        <if test="routeid!=null and routeid != ''">
+            and t.routeid like #{routeid} ||'%'
+        </if>
+        and t.del_flag=#{delFlag}
+    </select>
+</mapper>

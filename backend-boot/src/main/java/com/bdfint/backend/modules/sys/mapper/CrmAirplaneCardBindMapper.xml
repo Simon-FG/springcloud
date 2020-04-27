@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.sys.mapper.CrmAirplaneCardBindMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.sys.bean.CrmAirplaneCardBind" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="airplane_id" property="airplaneId" jdbcType="VARCHAR" />
+    <result column="card_id" property="cardId" jdbcType="VARCHAR" />
+    <result column="bind_time" property="bindTime" jdbcType="TIMESTAMP" />
+    <result column="unbind_time" property="unbindTime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResultMaps" type="com.bdfint.backend.modules.sys.bean.CrmAirplaneCard" >
+    <result column="card_id" property="cardId" jdbcType="VARCHAR" />
+    <result column="airplane_id" property="airplaneId" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="made_by" property="madeBy" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="factory_time" property="factoryTime" jdbcType="VARCHAR" />
+    <result column="purpose" property="purpose" jdbcType="VARCHAR" />
+    <result column="bd_device" property="bdDevice" jdbcType="VARCHAR" />
+    <result column="app_unit" property="appUnit" jdbcType="VARCHAR" />
+    <result column="reg_time" property="regTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    num,type
+  </sql>
+  <!-- 
+  <select id="queryCardAndAirplane" resultMap="BaseResultMap" parameterType="com.bdfint.backend.modules.sys.bean.CrmAirplaneCardBind" >
+	
+	SELECT g.num,IFNULL(NULL,'airplane_id') as type from
+	(
+		SELECT * FROM 
+		(
+		SELECT num,b FROM (
+		select c.tail_code as num ,b.airplane_id as b
+		from crm_airplane_manager c LEFT JOIN crm_airplane_card_bind b on c.tail_code != b.airplane_id 
+		WHERE
+		c.del_flag = '0' 
+		and c.`status` = '0'
+		<if test="userId != null" >
+            and c.user_id = #{userId,jdbcType=VARCHAR}
+        </if>
+		
+		)t WHERE  t.b is NOT NULL
+		)e
+	)g
+	UNION ALL
+	SELECT f.num,IFNULL(NULL,'card_id') as type FROM
+	(
+		SELECT num,b FROM (
+		select a.card_id as num ,b.card_id as b
+		from crm_north_card a LEFT JOIN crm_airplane_card_bind b on a.card_id != b.card_id 
+		WHERE 
+		a.del_flag = '0' 
+		and a.`status` = '1' 
+		<if test="userId != null" >
+            and a.user_id = #{userId,jdbcType=VARCHAR}
+        </if>
+		)t WHERE t.b is NOT NULL 
+	)f
+	
+  </select>
+   -->
+   
+   <!--根据北斗卡cardId查询飞行器信息 -->
+  <select id="queryByCardIdAirplaneCardBind" resultType="com.bdfint.backend.modules.sys.bean.CrmAirplaneCardBind" parameterType="com.bdfint.backend.modules.sys.bean.CrmAirplaneCardBind" >
+  	select t.*,m.purpose,m.age,m.bound,m.factory_time as factoryTime,m.type from crm_airplane_card_bind t LEFT JOIN crm_airplane_manager m on m.tail_code=t.airplane_id where t.card_id=#{cardId} and t.status='2' and t.del_flag=#{delFlag}
+  </select>
+  
+   <!--查询所有绑定信息 -->
+  <select id="queryBindList" resultMap="BaseResultMaps" parameterType="com.bdfint.backend.modules.sys.bean.CrmAirplaneCard">
+  	select a.card_id,a.airplane_id,b.type,b.made_by,b.age,c.company,b.factory_time,b.purpose,b.bd_device,b.app_unit,b.reg_time
+		from crm_airplane_card_bind a  
+		LEFT JOIN crm_airplane_manager b ON a.airplane_id = b.tail_code
+		LEFT JOIN sys_user_certified c ON a.user_id = c.reg_userid
+		where a.del_flag != 1
+  </select>
+
+
+  <select id="getListBy" resultType="com.bdfint.backend.modules.sys.bean.CrmAirplaneCardBind">
+    SELECT a.card_id, a.user_id, a.bound, a.start_time as cardTime, a.set_plane_color, a.tag, b.airplane_id, b.bind_time, b.start_time, b.status, c.real_name as name, c.company
+    FROM crm_north_card a
+    LEFT JOIN (SELECT * FROM crm_airplane_card_bind WHERE del_flag != '1' group by card_id) b ON a.card_id = b.card_id
+    LEFT JOIN sys_user_certified c ON a.user_id = c.reg_userid
+    <where>
+      <if test="cardId">
+        AND a.card_id LIKE CONCAT('%',#{cardId},'%')
+      </if>
+      <if test="userId">
+        AND a.user_id = #{userId}
+      </if>
+      <if test="airplaneId">
+        AND b.airplane_id = #{airplaneId}
+      </if>
+      <if test="status">
+        AND b.status = #{status}
+      </if>
+      <if test="bound">
+        AND a.bound = #{bound}
+      </if>
+      <if test="name">
+        AND c.real_name LIKE CONCAT('%',#{name},'%')
+      </if>
+    </where>
+    <bind name="order1" value="_parameter.getOrderBy()"/>
+    ORDER BY ${order1}
+  </select>
+   <!--若orderBy 默认值'xx',order by 'xx'相当于不排序，不报错(#{}会对结果加'',${}不会对结果加'')-->
+  
+  <select id="getReqList" resultType="com.bdfint.backend.modules.sys.bean.CrmAirplaneCardBind">
+    SELECT a.*,b.real_name as name
+    FROM crm_airplane_card_bind a LEFT JOIN sys_user_certified b ON a.user_id = b.reg_userid
+    WHERE a.del_flag != '1' AND a.status = '1'
+    <if test="cardId">
+      AND a.card_id LIKE CONCAT('%',#{cardId},'%')
+    </if>
+    <if test="userId">
+      AND a.user_id = #{userId}
+    </if>
+    <if test="airplaneId">
+      AND a.airplane_id = #{airplaneId}
+    </if>
+    <if test="name">
+      AND b.real_name LIKE CONCAT('%',#{name},'%')
+    </if>
+  </select>
+  
+</mapper>

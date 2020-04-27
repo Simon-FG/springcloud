@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.doubleskyline.manage.modules.bd.mapper.SmsMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.doubleskyline.manage.modules.bd.entity.SmsEntity" id="smsMap">
+        <result property="id" column="id"/>
+        <result property="sendCardId" column="send_card_id"/>
+        <result property="toCardId" column="to_card_id"/>
+        <result property="type" column="type"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="status" column="status"/>
+        <result property="sendTime" column="send_time"/>
+        <result property="userId" column="user_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="networkType" column="network_type"/>
+    </resultMap>
+
+    <resultMap type="com.doubleskyline.manage.modules.bd.vo.SmsVO" id="smsVOMap">
+        <result property="type" column="type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="count" column="count"/>
+    </resultMap>
+
+    <insert id="insertSms" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO `bdservice`.`bd_sms` ( `send_card_id`, `to_card_id`, `type`, `content`, `create_time`, `status`, `send_time`, `user_id`, `del_flag`, `network_type`)
+        VALUES ( #{sendCardId},#{toCardId}, #{type},#{content},#{createTime},#{status}, #{sendTime},#{userId},#{delFlag},#{networkType});
+    </insert>
+
+    <!--<select id="getList" resultMap="smsMap">
+        select  * from  bd_sms
+    </select>-->
+
+    <update id="updateStatus">
+         UPDATE bd_sms SET status = #{status} WHERE id = #{id}
+    </update>
+
+
+    <select id="getSmsData" resultMap="smsVOMap">
+        SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as create_time , COUNT(*) as count ,type
+        FROM `bd_sms`
+        WHERE 1=1
+        and send_card_id = #{sendCardId}
+        and create_time >= #{startTime}
+        <![CDATA[
+        and create_time <= #{endTime}
+        ]]>
+        GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d'),type;
+    </select>
+
+    <select id="getListNew5" resultMap="smsMap">
+        SELECT *
+        FROM bd_sms
+        ORDER BY create_time DESC
+        LIMIT 5
+    </select>
+
+    <select id="getSmsCount" resultMap="smsVOMap">
+        SELECT COUNT(*) count,network_type type
+        FROM bd_sms
+        GROUP BY network_type
+    </select>
+
+    <select id="getSmsMonth" resultMap="smsVOMap">
+        SELECT DATE_FORMAT(create_time, '%Y-%m') AS create_time , COUNT(*) as count
+        FROM bd_sms
+        WHERE DATE_FORMAT(create_time, '%Y-%m') in
+            <foreach collection="list" item="liuyue" index="index" open="(" close=")" separator=",">
+                #{liuyue}
+            </foreach>
+        GROUP BY DATE_FORMAT(create_time, '%Y-%m')
+    </select>
+
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT count(*) as count
+        FROM bd_sms
+        WHERE send_card_id in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+        AND to_days(create_time) = to_days(now());
+    </select>
+
+</mapper>

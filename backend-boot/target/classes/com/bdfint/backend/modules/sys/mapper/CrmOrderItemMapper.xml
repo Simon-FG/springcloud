@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.sys.mapper.CrmOrderItemMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.sys.bean.CrmOrderItem" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="full_price" property="fullPrice" jdbcType="DECIMAL" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="menu_id" property="menuId" jdbcType="INTEGER" />
+    <result column="address_id" property="addressId" jdbcType="INTEGER" />
+    <result column="order_type" property="orderType" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMaps" type="com.bdfint.backend.modules.sys.bean.CrmOrderItem" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="full_price" property="fullPrice" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="operate" property="operate" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="item_type" property="itemType" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="postalcode" property="postalcode" jdbcType="VARCHAR" />
+    <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="ems_order" property="emsOrder" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, order_id, create_time, full_price, user_name, goods_id, menu_id, address_id, 
+    order_type, status, start_time, user_id,del_flag
+  </sql>
+  
+  <!-- 创建订单 -->
+  <insert id="add" parameterType="com.bdfint.backend.modules.sys.bean.CrmOrderItem" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into crm_order_item (order_id, create_time, full_price, 
+      user_name, goods_id, menu_id, 
+      address_id, order_type, status, start_time, 
+      user_id)
+    values (#{orderId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{fullPrice,jdbcType=DECIMAL}, 
+      #{userName,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER}, #{menuId,jdbcType=INTEGER}, 
+      #{addressId,jdbcType=INTEGER}, #{orderType,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{userId,jdbcType=VARCHAR})
+  </insert>
+  
+  <!-- 添加收货地址 -->
+  <update id="addAddress" parameterType="com.bdfint.backend.modules.sys.bean.CrmOrderItem">
+  	update crm_order_item set user_name = #{userName,jdbcType=VARCHAR}, address_id = #{addressId,jdbcType=INTEGER},start_time = now(), status = '1'
+  	where order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 删除订单
+  <delete id="deleteFlag" parameterType="java.lang.String">  
+    update crm_order_item set del_flag = '1' where order_id = #{orderId,jdbcType=VARCHAR}
+  </delete> -->
+  <!--订单详细信息orderType为北斗卡级硬件 -->
+  <select id="selectMinOrderDetailByPage" resultMap="BaseResultMaps" parameterType="com.bdfint.backend.modules.sys.bean.CrmOrderItem" >
+    select a.order_id as orderId, a.`status`,a.full_price as fullPrice,a.start_time as startTime,
+     a.user_id, a.user_name, a.ems_order,
+     GROUP_CONCAT(concat(b.operate_time,'　',b.operate) ORDER BY b.operate_time ASC SEPARATOR ',')as operate,
+     c.`name` as `name`,c.item_type as itemType,c.price,d.total,
+     e.consignee,concat(e.region,'',e.detail_address)as address,e.postalcode,e.consignee,e.telephone,e.mobile 
+    from crm_order_item a INNER JOIN crm_order_operate_log b on a.order_id = b.order_id 
+    <if test="orderType == 1">INNER JOIN sys_product_item c INNER JOIN crm_north_card_request d on a.order_id = d.request_id INNER JOIN crm_address e</if>  
+    <if test="orderType == 2"> INNER JOIN sys_hardware_item c INNER JOIN crm_hardware_request d on a.order_id = d.request_id INNER JOIN crm_address e</if>  
+	where a.order_id = #{orderId,jdbcType=VARCHAR} and c.item_id = #{goodsId,jdbcType=INTEGER} and e.id = #{addressId,jdbcType=INTEGER} GROUP BY a.id
+  </select>
+  
+   <!--订单详细信息orderType为增值服务级转网 -->
+  <select id="selectMaxOrderDetailByPage" resultMap="BaseResultMaps" parameterType="com.bdfint.backend.modules.sys.bean.CrmOrderItem" >
+  	select a.order_id as orderId, a.`status`,a.full_price as fullPrice,a.start_time as startTime,
+     a.user_id, a.user_name, a.ems_order,
+    GROUP_CONCAT(concat(b.operate_time,'　',b.operate) ORDER BY b.operate_time ASC SEPARATOR ',')as operate,
+     c.`name` as `name`,c.item_type as itemType,c.price,d.total
+    from crm_order_item a INNER JOIN crm_order_operate_log b on a.order_id = b.order_id
+    <if test="orderType == 3">INNER JOIN sys_sms_item c INNER JOIN crm_sms_request d on a.order_id = d.request_id</if>
+	where a.order_id = #{orderId,jdbcType=VARCHAR} and c.item_id = #{goodsId,jdbcType=INTEGER} GROUP BY a.id
+  </select>
+</mapper>

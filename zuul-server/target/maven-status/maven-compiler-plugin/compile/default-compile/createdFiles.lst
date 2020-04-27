@@ -1,0 +1,6 @@
+com\lovnx\filter\SecondFilter.class
+com\lovnx\filter\FirstFilter.class
+com\lovnx\filter\ErrorFilter.class
+com\lovnx\filter\ResultFilter.class
+com\lovnx\MvcConfig.class
+com\lovnx\ZuulApplication.class

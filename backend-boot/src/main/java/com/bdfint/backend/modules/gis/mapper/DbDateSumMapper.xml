@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.DbDateSumMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.DbDateSum" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="card_id" property="cardId" jdbcType="VARCHAR" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="DATE" />
+    <result column="end_time" property="endTime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, card_id, total, start_time, end_time
+  </sql>
+<!--  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from db_date_sum
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from db_date_sum
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.bdfint.backend.modules.gis.bean.DbDateSum" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      postgresql
+    </selectKey>
+    insert into db_date_sum (card_id, total, start_time, 
+      end_time)
+    values (#{cardId,jdbcType=VARCHAR}, #{total,jdbcType=INTEGER}, #{startTime,jdbcType=DATE}, 
+      #{endTime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bdfint.backend.modules.gis.bean.DbDateSum" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      postgresql
+    </selectKey>
+    insert into db_date_sum
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cardId != null" >
+        card_id,
+      </if>
+      <if test="total != null" >
+        total,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cardId != null" >
+        #{cardId,jdbcType=VARCHAR},
+      </if>
+      <if test="total != null" >
+        #{total,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bdfint.backend.modules.gis.bean.DbDateSum" >
+    update db_date_sum
+    <set >
+      <if test="cardId != null" >
+        card_id = #{cardId,jdbcType=VARCHAR},
+      </if>
+      <if test="total != null" >
+        total = #{total,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bdfint.backend.modules.gis.bean.DbDateSum" >
+    update db_date_sum
+    set card_id = #{cardId,jdbcType=VARCHAR},
+      total = #{total,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=DATE},
+      end_time = #{endTime,jdbcType=DATE}
+    where id = #{id,jdbcType=BIGINT}
+  </update>-->
+  <insert id="addBatch" parameterType="java.util.List">
+      INSERT INTO db_date_sum (card_id, total, start_time, end_time, type, msg_type)
+      VALUES
+      <foreach collection="list" item="item" separator=",">
+          (#{item.cardId},#{item.total},#{item.startTime},#{item.endTime},#{item.type},#{item.msgType})
+      </foreach>
+  </insert>
+
+    <select id="getListSend" >
+        select * from db_date_sum t where 1=1
+        <if test="cardId!=null and cardId != ''">
+            and t.card_id = #{cardId}
+        </if>
+        <if test="startTime!=null">
+            <![CDATA[ and to_char(t.end_time, 'yyyy-MM-dd HH:mm:ss')  >=  #{startTime}  ]]>
+        </if>
+        <if test="endTime!=null">
+            <![CDATA[ and to_char(t.start_time, 'yyyy-MM-dd HH:mm:ss')  <=  #{endTime}  ]]>
+        </if>
+        and t.del_flag=#{delFlag} order by t.id desc
+    </select>
+
+    <select id="getListReceive" >
+        select * from db_date_sum t where 1=1
+        <if test="toCardId!=null and toCardId != ''">
+            and t.to_card_id = #{toCardId}
+        </if>
+        <if test="startTime!=null">
+            <![CDATA[ and to_char(t.end_time, 'yyyy-MM-dd HH:mm:ss')  >=  #{startTime}  ]]>
+        </if>
+        <if test="endTime!=null">
+            <![CDATA[ and to_char(t.start_time, 'yyyy-MM-dd HH:mm:ss')  <=  #{endTime}  ]]>
+        </if>
+        and t.del_flag=#{delFlag} order by t.id desc
+    </select>
+</mapper>

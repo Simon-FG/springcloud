@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/ZYYT.iml" filepath="$PROJECT_DIR$/.idea/ZYYT.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backclient-mysql/backclient-mysql.iml" filepath="$PROJECT_DIR$/backclient-mysql/backclient-mysql.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend-boot/backend-boot.iml" filepath="$PROJECT_DIR$/backend-boot/backend-boot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backservice-rabbitmq/backservice-rabbitmq.iml" filepath="$PROJECT_DIR$/backservice-rabbitmq/backservice-rabbitmq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/config-server/config-server.iml" filepath="$PROJECT_DIR$/config-server/config-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/register-server/eureka-sever.iml" filepath="$PROJECT_DIR$/register-server/eureka-sever.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hystrix-feign-server/hystrix-feign-server.iml" filepath="$PROJECT_DIR$/hystrix-feign-server/hystrix-feign-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage/manage.iml" filepath="$PROJECT_DIR$/manage/manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/operation/operation.iml" filepath="$PROJECT_DIR$/operation/operation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zuul-server/zuul-server.iml" filepath="$PROJECT_DIR$/zuul-server/zuul-server.iml" />
+    </modules>
+  </component>
+</project>

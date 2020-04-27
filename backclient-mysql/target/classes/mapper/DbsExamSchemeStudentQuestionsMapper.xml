@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dbs.mapper.DbsExamSchemeStudentQuestionsMapper" >
+  <resultMap id="BaseResultMap" type="com.dbs.model.DbsExamSchemeStudentQuestions" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="scheme_student_id" property="schemeStudentId" jdbcType="VARCHAR" />
+    <result column="questions_id" property="questionsId" jdbcType="VARCHAR" />
+    <result column="single_score" property="singleScore" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+     <result column="student_answer" property="studentAnswer" jdbcType="VARCHAR" />  
+
+  </resultMap>
+    <select id="findAdmin" resultMap="BaseResultMap">  
+        select * from dbs_exam_scheme_student_questions 
+    </select>  
+</mapper>

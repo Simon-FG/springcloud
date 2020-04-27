@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdfint.backend.modules.gis.mapper.GisLayerControlMapper" >
+  <resultMap id="BaseResultMap" type="com.bdfint.backend.modules.gis.bean.GisLayerControl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="layer_name" property="layerName" jdbcType="VARCHAR" />
+    <result column="layer_label" property="layerLabel" jdbcType="VARCHAR" />
+    <result column="layer_type" property="layerType" jdbcType="VARCHAR" />
+    <result column="layer_order" property="layerOrder" jdbcType="INTEGER" />
+    <result column="layer_display" property="layerDisplay" jdbcType="CHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="layer_style_id" property="layerStyleId" jdbcType="CHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="together_dist" property="togetherDist" jdbcType="INTEGER" />
+    <result column="layer_group_id" property="layerGroupId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, layer_name, layer_label, layer_type, layer_order, layer_display, del_flag, layer_style_id, 
+    user_id, together_dist,layer_group_id
+  </sql>
+ 
+  <!-- 根据图层组ID查询图层 -->
+  <select id="queryBylayerGroupIdLayer" resultType="com.bdfint.backend.modules.gis.bean.GisLayerControl" parameterType="com.bdfint.backend.modules.gis.bean.GisLayerControl" >
+  	select t.id,t.layer_group_id as layerGroupId,t.layer_label as layerLabel,t.layer_type as layerType,t.layer_display as layerDisplay,t.layer_style_id as layerStyleId,t.layer_order as layerOrder from gis_layer_control t where t.layer_group_id=#{layerGroupId} and t.del_flag=#{delFlag} 
+  	<if test="userId!=null and userId != ''">
+  		and t.user_id=#{userId}
+  	</if>
+  	order by t.layer_order
+  </select>
+ 
+ <!-- 根据主键ID修改图层排序和是否可视 -->
+  <update id="updateByIdlayerOrderAndlayerDisplay" parameterType="com.bdfint.backend.modules.gis.bean.GisLayerControl">
+  	update gis_layer_control t set t.layer_order = #{layerOrder,jdbcType=VARCHAR}, t.layer_display = #{layerDisplay,jdbcType=CHAR}
+  	where t.id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+ <!-- 根据图层组统计数量 -->
+ <select id="queryBylayerGroupIdCount" resultType="Integer" parameterType="com.bdfint.backend.modules.gis.bean.GisLayerControl" >
+  	select count(*) from gis_layer_control t where t.layer_group_id=#{layerGroupId}
+  </select>
+  
+ <!-- 新增图层 -->
+ <insert id="insertGisLayerControl" useGeneratedKeys="true" keyProperty="id" parameterType="com.bdfint.backend.modules.gis.bean.GisLayerControl">
+ 	insert into gis_layer_control(layer_name, layer_label, layer_type, layer_order, layer_display, del_flag, layer_style_id, user_id, together_dist,layer_group_id)
+    values(#{layerName},#{layerLabel},#{layerType},#{layerOrder},#{layerDisplay},#{delFlag},#{layerStyleId},#{userId},#{togetherDist},#{layerGroupId})
+ </insert>
+ 
+  <!-- 伪删除  -->
+  <update id="delBatch">
+    update gis_layer_control
+    set del_flag=1
+    WHERE id IN
+    <foreach collection="array" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+</mapper>
